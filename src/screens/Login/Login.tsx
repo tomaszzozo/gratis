@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 
-export default function App() {
+const Login = () => {
   return (
     <View
       style={{
@@ -9,7 +9,9 @@ export default function App() {
         alignItems: "center",
       }}
     >
-      <Text>Universal React with Expo</Text>
+      <Text>Login screen</Text>
     </View>
   );
-}
+};
+
+export default Login;
