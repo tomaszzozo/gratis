@@ -3,11 +3,13 @@ import { NativeBaseProvider } from "native-base";
 
 import AppNavigation from "./src/navigation/AppNavigation";
 
+import customTheme from "./src/customTheme";
+
 const App = () => {
   const navigationRef = useRef(null);
 
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={customTheme}>
       <AppNavigation navigationRef={navigationRef} />
     </NativeBaseProvider>
   );

@@ -1,21 +1,44 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Login from "../screens/Login/Login";
+import Register from "../screens/Register/Register";
+import PasswordReset from "../screens/PasswordReset/PasswordReset";
 
-const Stack = createNativeStackNavigator();
+import COLORS from "../constants/colors";
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: COLORS["gamboge orange"],
+  },
+};
+
+export type RootStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  PasswordReset: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AuthStack = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      initialRouteName="Login"
+      screenOptions={{ headerShown: false, animation: "none" }}
+    >
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="PasswordReset" component={PasswordReset} />
     </Stack.Navigator>
   );
 };
 
 const AppNavigation = ({ navigationRef }: { navigationRef: any }) => {
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer ref={navigationRef} theme={theme}>
       <AuthStack />
     </NavigationContainer>
   );
