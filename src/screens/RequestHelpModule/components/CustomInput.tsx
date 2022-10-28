@@ -76,6 +76,7 @@ const CustomInput = ({
                     borderRadius={0}
                     fontSize={14}
                     type={type}
+                    style={{fontFamily: "Lato"}}
                     value={state}
                     onChangeText={(text: string) => setState(text)}
                 />
