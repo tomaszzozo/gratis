@@ -47,6 +47,12 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "space-between"
+    },
+    buttonWhenEmailCorrect: {
+        opacity: 1
+    },
+    button: {
+        opacity: 0.5
     }
 });
 

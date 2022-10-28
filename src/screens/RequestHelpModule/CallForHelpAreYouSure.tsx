@@ -7,16 +7,13 @@ import {Feather} from "@expo/vector-icons";
 import COLORS from "../../constants/colors";
 import CustomButton from "./components/CustomButton";
 
-const helpMeClick = () => {
-    throw new Error('Not implemented yet');
-}
-
-const goBackClick = () => {
-    throw new Error('Not implemented yet');
+const isEmailCorrect = (email: string): boolean => {
+    return email == "test"
 }
 
 const CallForHelpAreYouSure = () => {
     const [email, setEmail] = useState("");
+    const [okButtonStyle, setOkButtonStyle] = useState(styles.button);
     return (
         <View style={styles.wrapper}>
             <Center>
@@ -30,23 +27,32 @@ const CallForHelpAreYouSure = () => {
                     This action can be performed about once every hour. Abusing this action WILL get you banned.
                     Write your email to accept this operation.
                 </Text>
-                <CustomInput
-                    state={email}
-                    setState={(input: string) => setEmail(input)}
-                    placeholder="Email"
-                    icon={<Feather name="at-sign" color={COLORS.blood}/>}
-                />
+                    <CustomInput
+                        state={email}
+                        setState={(input: string) => {
+                            setEmail(input);
+                            setOkButtonStyle(isEmailCorrect(input) ? styles.buttonWhenEmailCorrect : styles.button);
+                        }}
+                        placeholder="Email"
+                        icon={<Feather name="at-sign" color={COLORS.blood}/>}
+                    />
             </Center>
 
             <View>
-                <CustomButton
-                    margin={0}
-                    text="OK, HELP ME!"
-                    clickHandler={helpMeClick}
-                />
+                <View style={okButtonStyle}>
+                    <CustomButton
+                        margin={0}
+                        text="OK, HELP ME!"
+                        clickHandler={() => {
+                            if (isEmailCorrect(email)) throw new Error('Not implemented yet');
+                        }}
+                    />
+                </View>
                 <CustomButton
                     text="GO BACK"
-                    clickHandler={goBackClick}
+                    clickHandler={() => {
+                        throw new Error('Not implemented yet');
+                    }}
                 />
             </View>
         </View>
