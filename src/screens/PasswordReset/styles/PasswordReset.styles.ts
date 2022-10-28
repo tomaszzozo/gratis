@@ -24,10 +24,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: COLORS["floral white"],
   },
-  textBold: {
+  bloodyTextBold: {
     fontSize: 12,
     fontWeight: "bold",
     color: COLORS.blood,
+  },
+  whiteTextBold: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: COLORS["floral white"],
   },
   bloodyText: {
     fontSize: 12,

@@ -1,41 +1,23 @@
-import { useState } from "react";
 import { View, Text, Image } from "react-native";
 import { VStack, Center } from "native-base";
-import { Feather } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/AppNavigation";
 import { useNavigation } from "@react-navigation/native";
-import { auth } from "../../../firebaseConfig";
-import { sendPasswordResetEmail } from "firebase/auth";
 
-import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
 
 import Logo from "../../../assets/logo/logoMockWhite.png";
 
-import COLORS from "../../constants/colors";
 import styles from "./styles/PasswordReset.styles";
 
-type PasswordResetScreenProp = NativeStackNavigationProp<RootStackParamList>;
+type PasswordResetConfirmationScreenProp =
+  NativeStackNavigationProp<RootStackParamList>;
 
-const PasswordReset = () => {
-  const [email, setEmail] = useState("");
+const PasswordResetConfirmation = () => {
+  const navigation = useNavigation<PasswordResetConfirmationScreenProp>();
 
-  const navigation = useNavigation<PasswordResetScreenProp>();
-
-  const handleTakeMeBackPress = () => {
+  const handleGoBackButtonPress = () => {
     navigation.navigate("Login");
-  };
-
-  const handleEmailChange = (text: string) => {
-    setEmail(text);
-  };
-
-  const handleResetButtonPress = () => {
-    /*sendPasswordResetEmail(auth, email)
-      .then((res) => console.log(res))
-      .catch((error) => console.log(error));*/
-    navigation.navigate("PasswordResetConfirmation");
   };
 
   return (
@@ -50,6 +32,9 @@ const PasswordReset = () => {
           <Text style={styles.signUpText}>PASSWORD RESET</Text>
         </Center>
         <Center marginTop="10%">
+          <Text style={styles.whiteTextBold}>All done!</Text>
+        </Center>
+        <Center marginTop="5%">
           <Text style={styles.whiteText}>Enter your email addres.</Text>
           <Text style={styles.whiteText}>
             If this is the email associated with your
@@ -62,28 +47,12 @@ const PasswordReset = () => {
           </Text>
           <Text style={styles.whiteText}>your new password.</Text>
         </Center>
-        <Center marginTop="10%">
-          <CustomInput
-            state={email}
-            setState={handleEmailChange}
-            placeholder="Email"
-            icon={<Feather name="at-sign" color={COLORS.blood} />}
-          />
-        </Center>
-        <Center marginTop="10%">
-          <CustomButton
-            text="RESET PASSWORD"
-            clickHandler={handleResetButtonPress}
-          />
-        </Center>
-        <Center marginTop="10%">
-          <Text style={styles.bloodyText} onPress={handleTakeMeBackPress}>
-            Nevermind, <Text style={styles.bloodyTextBold}>take me back</Text>
-          </Text>
+        <Center marginTop="15%">
+          <CustomButton text="GO BACK" clickHandler={handleGoBackButtonPress} />
         </Center>
       </VStack>
     </View>
   );
 };
 
-export default PasswordReset;
+export default PasswordResetConfirmation;

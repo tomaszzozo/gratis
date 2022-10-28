@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "../screens/Login/Login";
 import Register from "../screens/Register/Register";
 import PasswordReset from "../screens/PasswordReset/PasswordReset";
+import PasswordResetConfirmation from "../screens/PasswordReset/PasswordResetConfirmation";
 
 import COLORS from "../constants/colors";
 
@@ -19,6 +20,7 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   PasswordReset: undefined;
+  PasswordResetConfirmation: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -32,6 +34,10 @@ const AuthStack = () => {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="PasswordReset" component={PasswordReset} />
+      <Stack.Screen
+        name="PasswordResetConfirmation"
+        component={PasswordResetConfirmation}
+      />
     </Stack.Navigator>
   );
 };
