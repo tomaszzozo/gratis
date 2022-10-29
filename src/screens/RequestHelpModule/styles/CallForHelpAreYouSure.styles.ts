@@ -1,6 +1,5 @@
-import {StyleSheet} from "react-native";
+import {Dimensions, StyleSheet} from "react-native";
 import COLORS from "../../../constants/colors";
-import {Dimensions} from "react-native";
 
 function calculateFontSize(labelType: "header" | "paragraph" = "paragraph"): number {
     let width = Dimensions.get('window').width;

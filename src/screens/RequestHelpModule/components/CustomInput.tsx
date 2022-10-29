@@ -1,5 +1,5 @@
 import React from "react";
-import {Input, Icon, Box, FormControl, Center} from "native-base";
+import {Box, Center, FormControl, Icon, Input} from "native-base";
 import {Dimensions} from "react-native";
 
 import COLORS from "../../../constants/colors";

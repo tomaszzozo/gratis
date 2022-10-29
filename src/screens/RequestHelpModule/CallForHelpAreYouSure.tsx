@@ -27,15 +27,15 @@ const CallForHelpAreYouSure = () => {
                     This action can be performed about once every hour. Abusing this action WILL get you banned.
                     Write your email to accept this operation.
                 </Text>
-                    <CustomInput
-                        state={email}
-                        setState={(input: string) => {
-                            setEmail(input);
-                            setOkButtonStyle(isEmailCorrect(input) ? styles.buttonWhenEmailCorrect : styles.button);
-                        }}
-                        placeholder="Email"
-                        icon={<Feather name="at-sign" color={COLORS.blood}/>}
-                    />
+                <CustomInput
+                    state={email}
+                    setState={(input: string) => {
+                        setEmail(input);
+                        setOkButtonStyle(isEmailCorrect(input) ? styles.buttonWhenEmailCorrect : styles.button);
+                    }}
+                    placeholder="Email"
+                    icon={<Feather name="at-sign" color={COLORS.blood}/>}
+                />
             </Center>
 
             <View>

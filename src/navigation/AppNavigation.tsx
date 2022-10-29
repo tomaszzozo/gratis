@@ -8,6 +8,7 @@ import PasswordResetConfirmation from "../screens/PasswordReset/PasswordResetCon
 
 import COLORS from "../constants/colors";
 import CallForHelpAreYouSure from "../screens/RequestHelpModule/CallForHelpAreYouSure";
+import CallForHelp from "../screens/RequestHelpModule/CallForHelp";
 
 const theme = {
     ...DefaultTheme,
@@ -23,6 +24,7 @@ export type RootStackParamList = {
     PasswordReset: undefined;
     PasswordResetConfirmation: undefined;
     CallForHelpAreYouSure: undefined;
+    CallForHelp: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -47,10 +49,11 @@ const AuthStack = () => {
 const HelpCallStack = () => {
     return (
         <Stack.Navigator
-            initialRouteName="CallForHelpAreYouSure"
+            initialRouteName="CallForHelp"
             screenOptions={{headerShown: false, animation: "none"}}
         >
             <Stack.Screen name="CallForHelpAreYouSure" component={CallForHelpAreYouSure}/>
+            <Stack.Screen name="CallForHelp" component={CallForHelp}/>
         </Stack.Navigator>
     )
 }
