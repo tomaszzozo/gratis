@@ -9,6 +9,17 @@ type CustomButtonProps = {
     clickHandler: () => void;
 };
 
+const calculateFontSize = (): number => {
+    let height = Dimensions.get('window').height;
+    if (height >= 1300) return 18;
+    if (height >= 1200) return 17;
+    if (height >= 1100) return 16;
+    if (height >= 1000) return 15;
+    if (height >= 890) return 14;
+    if (height >= 800) return 13;
+    return 12;
+}
+
 const CustomButton = ({
                           text,
                           margin = 18,
@@ -28,7 +39,7 @@ const CustomButton = ({
             onPress={clickHandler}
         >
             <Text style={{
-                fontSize: 12,
+                fontSize: calculateFontSize(),
                 fontFamily: "Lato-Bold",
                 color: COLORS["floral white"]
             }}>
