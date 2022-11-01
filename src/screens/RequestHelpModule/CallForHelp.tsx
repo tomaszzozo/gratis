@@ -8,10 +8,10 @@ import CustomButton from "./components/CustomButton";
 import {MaterialIcons} from '@expo/vector-icons';
 import COLORS from "../../constants/colors";
 import HelpingUserCard from "./components/HelpingUserCard";
-import Geolocation from '@react-native-community/geolocation';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
 import {useNavigation} from "@react-navigation/native";
+import * as Location from 'expo-location';
 
 const RenderUsersWhoWantToHelp = () => {
     return (
@@ -46,25 +46,36 @@ const RenderUsersWhoWantToHelp = () => {
 }
 
 const CallForHelp = () => {
-    const updateData = () => {
-        Geolocation.getCurrentPosition(info => {
-            setCoords({latitude: info.coords.latitude.toString(), longitude: info.coords.longitude.toString()});
-            setLastRefresh(new Date().toString().substring(16, 24));
-        });
-    }
-
-    updateData();
-    useEffect(() => {
-        const interval = setInterval(() => {
-            updateData();
-        }, 60 * 1000);
-        return () => clearInterval(interval);
-    }, []);
-
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
     const [coords, setCoords] = useState<{ latitude: string, longitude: string }>({latitude: "", longitude: ""});
     const [lastRefresh, setLastRefresh] = useState(new Date().toString().substring(16, 24));
+
+    const getLocation = async () => {
+        let location = await Location.getCurrentPositionAsync({});
+        setCoords({
+            latitude: location.coords.latitude.toString().substring(0, 9),
+            longitude: location.coords.longitude.toString().substring(0, 9)
+        })
+    }
+
+    useEffect(() => {
+        (async () => {
+            let {status} = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                // TODO: navigate to main screen
+                throw new Error("This action should navigate you to main screen, however it is yet to be implemented.");
+            }
+            await getLocation()
+        })();
+    }, []);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setLastRefresh(new Date().toString().substring(16, 24));
+            getLocation()
+        }, 5 * 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <>
