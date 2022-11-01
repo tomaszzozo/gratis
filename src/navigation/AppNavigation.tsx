@@ -49,7 +49,7 @@ const AuthStack = () => {
 const HelpCallStack = () => {
     return (
         <Stack.Navigator
-            initialRouteName="CallForHelp"
+            initialRouteName="CallForHelpAreYouSure"
             screenOptions={{headerShown: false, animation: "none"}}
         >
             <Stack.Screen name="CallForHelpAreYouSure" component={CallForHelpAreYouSure}/>

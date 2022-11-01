@@ -6,6 +6,9 @@ import CustomInput from "./components/CustomInput";
 import {Feather} from "@expo/vector-icons";
 import COLORS from "../../constants/colors";
 import CustomButton from "./components/CustomButton";
+import {useNavigation} from "@react-navigation/native";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../../navigation/AppNavigation";
 
 const isEmailCorrect = (email: string): boolean => {
     return email == "test"
@@ -14,6 +17,8 @@ const isEmailCorrect = (email: string): boolean => {
 const CallForHelpAreYouSure = () => {
     const [email, setEmail] = useState("");
     const [okButtonStyle, setOkButtonStyle] = useState(styles.button);
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
     return (
         <View style={styles.wrapper}>
             <Center>
@@ -44,13 +49,14 @@ const CallForHelpAreYouSure = () => {
                         margin={0}
                         text="OK, HELP ME!"
                         clickHandler={() => {
-                            if (isEmailCorrect(email)) throw new Error('Not implemented yet');
+                            if (isEmailCorrect(email)) navigation.navigate("CallForHelp");
                         }}
                     />
                 </View>
                 <CustomButton
                     text="GO BACK"
                     clickHandler={() => {
+                        // TODO: go to main screen
                         throw new Error('Not implemented yet');
                     }}
                 />

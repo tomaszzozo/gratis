@@ -1,13 +1,17 @@
 import {Box, ScrollView} from "native-base";
 import styles from "./styles/CallForHelp.styles";
 import Ribbon from "./components/Ribbon";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Dimensions, Text} from "react-native";
 import LineSeparator from "../../components/common/LineSeparator";
 import CustomButton from "./components/CustomButton";
 import {MaterialIcons} from '@expo/vector-icons';
 import COLORS from "../../constants/colors";
 import HelpingUserCard from "./components/HelpingUserCard";
+import Geolocation from '@react-native-community/geolocation';
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../../navigation/AppNavigation";
+import {useNavigation} from "@react-navigation/native";
 
 const RenderUsersWhoWantToHelp = () => {
     return (
@@ -42,6 +46,26 @@ const RenderUsersWhoWantToHelp = () => {
 }
 
 const CallForHelp = () => {
+    const updateData = () => {
+        Geolocation.getCurrentPosition(info => {
+            setCoords({latitude: info.coords.latitude.toString(), longitude: info.coords.longitude.toString()});
+            setLastRefresh(new Date().toString().substring(16, 24));
+        });
+    }
+
+    updateData();
+    useEffect(() => {
+        const interval = setInterval(() => {
+            updateData();
+        }, 60 * 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+    const [coords, setCoords] = useState<{ latitude: string, longitude: string }>({latitude: "", longitude: ""});
+    const [lastRefresh, setLastRefresh] = useState(new Date().toString().substring(16, 24));
+
     return (
         <>
             <Ribbon text={"Requesting help"}/>
@@ -59,7 +83,7 @@ const CallForHelp = () => {
                     </Box>
                 </Box>
                 <Box style={styles.middleSection}>
-                    <ScrollView h={styles.middleSection.height-20}>
+                    <ScrollView h={styles.middleSection.height - 20}>
                         <RenderUsersWhoWantToHelp/>
                     </ScrollView>
                     <Box style={styles.lineSeparatorPosition}>
@@ -76,16 +100,18 @@ const CallForHelp = () => {
                         <Box style={styles.bottomCard}>
                             <MaterialIcons name="refresh" size={Dimensions.get('window').height * 32 / 568}
                                            color={COLORS["floral white"]}/>
-                            <Text style={styles.bottomCardText}>Last refresh: 21:34:05</Text>
+                            <Text style={styles.bottomCardText}>Last refresh: {lastRefresh}</Text>
                         </Box>
                         <Box style={styles.bottomCard}>
                             <MaterialIcons name="location-pin" size={Dimensions.get('window').height * 32 / 568}
                                            color={COLORS["floral white"]}/>
-                            <Text style={styles.bottomCardText}>41°24'12.2"N{"\n"}2°10'26.5"E</Text>
+                            <Text
+                                style={styles.bottomCardText}>Latitude: {coords.latitude}{"\n"}Longitude: {coords.longitude}</Text>
                         </Box>
                     </Box>
                     <Box style={styles.cancelButtonPosition}>
                         <CustomButton text="CANCEL" margin={0} clickHandler={() => {
+                            // TODO: go to main screen
                             throw new Error("Not implemented")
                         }}/>
                     </Box>
