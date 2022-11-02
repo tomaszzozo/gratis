@@ -25,6 +25,8 @@ const styles = StyleSheet.create({
         textShadowOffset: {width: 0, height: 4},
         textShadowColor: "rgba(0, 0, 0, 0.25)",
         textShadowRadius: 4,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS["floral white"],
     },
     textBold: {
         fontSize: 12,
@@ -36,6 +38,8 @@ const styles = StyleSheet.create({
         color: COLORS.blood,
     },
     textInformation: {
+        width:"75%",
+        marginTop: 20,
         fontSize: 12,
         color: COLORS.white,
     },

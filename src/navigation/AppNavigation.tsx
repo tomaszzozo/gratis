@@ -5,7 +5,8 @@ import Login from "../screens/Login/Login";
 import Register from "../screens/Register/Register";
 import PasswordReset from "../screens/PasswordReset/PasswordReset";
 import PasswordResetConfirmation from "../screens/PasswordReset/PasswordResetConfirmation";
-import FirstLogin from "../screens/First_login/FirstLogin";
+import FirstLoginAddress from "../screens/First_login/FirstLoginAddress";
+import FirstLoginPhone from "../screens/First_login/FirstLoginPhone";
 
 import COLORS from "../constants/colors";
 import CallForHelpAreYouSure from "../screens/RequestHelpModule/CallForHelpAreYouSure";
@@ -21,7 +22,8 @@ const theme = {
 
 export type RootStackParamList = {
     Login: undefined;
-    FirstLogin: undefined;
+    FirstLoginAddress: undefined;
+    FirstLoginPhone: undefined;
     Register: undefined;
     PasswordReset: undefined;
     PasswordResetConfirmation: undefined;
@@ -65,7 +67,7 @@ const AppNavigation = ({navigationRef}: { navigationRef: any }) => {
     return (
         <NavigationContainer ref={navigationRef} theme={theme}>
             {/*<AuthStack />*/}
-            <HelpCallStack/>
+            <Register/>
         </NavigationContainer>
     );
 };
