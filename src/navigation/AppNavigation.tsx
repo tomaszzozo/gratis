@@ -5,6 +5,7 @@ import Login from "../screens/Login/Login";
 import Register from "../screens/Register/Register";
 import PasswordReset from "../screens/PasswordReset/PasswordReset";
 import PasswordResetConfirmation from "../screens/PasswordReset/PasswordResetConfirmation";
+import FirstLogin from "../screens/First_login/FirstLogin";
 
 import COLORS from "../constants/colors";
 import CallForHelpAreYouSure from "../screens/RequestHelpModule/CallForHelpAreYouSure";
@@ -20,11 +21,13 @@ const theme = {
 
 export type RootStackParamList = {
     Login: undefined;
+    FirstLogin: undefined;
     Register: undefined;
     PasswordReset: undefined;
     PasswordResetConfirmation: undefined;
     CallForHelpAreYouSure: undefined;
     CallForHelp: undefined;
+
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

@@ -18,6 +18,14 @@ const styles = StyleSheet.create({
         textShadowColor: "rgba(0, 0, 0, 0.25)",
         textShadowRadius: 4,
     },
+    headerText2: {
+        fontSize: 24,
+        color: COLORS.white,
+        fontWeight: "bold",
+        textShadowOffset: {width: 0, height: 4},
+        textShadowColor: "rgba(0, 0, 0, 0.25)",
+        textShadowRadius: 4,
+    },
     textBold: {
         fontSize: 12,
         fontWeight: "bold",
@@ -26,6 +34,10 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 12,
         color: COLORS.blood,
+    },
+    textInformation: {
+        fontSize: 12,
+        color: COLORS.white,
     },
 });
 
