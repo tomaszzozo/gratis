@@ -52,13 +52,6 @@ describe("Call for help", () => {
             }
         }
     })
-
-    it('does not leave the location empty', async () => {
-        render(component)
-        await new Promise(r => setTimeout(r, 5000));
-        expect(content.longitudeValue()).not.toBe("")
-        expect(content.latitudeValue()).not.toBe("")
-    })
 })
 
 
