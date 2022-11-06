@@ -64,9 +64,14 @@ const CallForHelp = () => {
             let {status} = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 // TODO: navigate to main screen
-                throw new Error("This action should navigate you to main screen, however it is yet to be implemented.");
+                setCoords({
+                    latitude: "NO_PERMISSION",
+                    longitude: "NO_PERMISSION"
+                })
+                throw new Error("Not implemented")
+            } else {
+                await getLocation()
             }
-            await getLocation()
         })();
     }, []);
     useEffect(() => {
