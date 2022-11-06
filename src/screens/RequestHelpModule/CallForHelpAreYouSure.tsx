@@ -44,7 +44,7 @@ const CallForHelpAreYouSure = () => {
             </Center>
 
             <View>
-                <View style={okButtonStyle}>
+                <View style={okButtonStyle} testID={"opacityView"}>
                     <CustomButton
                         margin={0}
                         text="OK, HELP ME!"
