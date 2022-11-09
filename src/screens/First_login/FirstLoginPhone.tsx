@@ -5,7 +5,8 @@ import {Foundation} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
-import { } from "firebase/auth"; // dodać funkcje do obsługi adresu
+import { getDatabase, ref, set } from "firebase/database";
+import auth from '@react-native-firebase/auth';
 
 import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
@@ -19,11 +20,21 @@ type FirstLoginPhone = NativeStackNavigationProp<RootStackParamList>;
 
 const FirstLoginPhone = () => {
     const [phone, setPhone] = useState("");
+    const currentUser = auth().currentUser;
 
     const navigation = useNavigation<FirstLoginPhone>();
 
     const handleContinue = () => {
-        //navigation.navigate("MainMenu");
+        const updatePhone = (phone: string) => {
+            //update address in firebase based on user email
+            if(phone != "" && currentUser != null){
+                //update address in firebase
+                set(ref(getDatabase(), 'users/' + currentUser.email + '/phone'), {
+                    phone: phone
+                });
+            }
+            //navigation.navigate("MainMenu");
+        };
     };
 
     const handlePhoneChange = (text: string) => {

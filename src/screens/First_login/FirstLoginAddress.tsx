@@ -5,31 +5,43 @@ import {Foundation} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
-import { } from "firebase/auth"; // dodać funkcje do obsługi adresu
-
+import { getDatabase, ref, set } from "firebase/database";
 import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
-
 import Logo from "../../../assets/logo/logoMockWhite.png";
-
 import COLORS from "../../constants/colors";
 import styles from "./styles/FirstLogin.styles";
+import auth from '@react-native-firebase/auth';
+
 
 type FirstLoginAddress = NativeStackNavigationProp<RootStackParamList>;
 
 const FirstLoginAddress = () => {
     const [address, setAddress] = useState("");
+    const currentUser = auth().currentUser;
 
     const navigation = useNavigation<FirstLoginAddress>();
 
     const handleContinue = () => {
-        //navigation.navigate("MainMenu");
+        //upadate address in firebase based on user email
+        updateAddress(address);
+        
     };
 
     const handleAddressChange = (text: string) => {
         setAddress(text);
     };
 
+    const updateAddress = (address: string) => {
+        //update address in firebase based on user email
+        if(address != "" && currentUser != null){
+            //update address in firebase
+            set(ref(getDatabase(), 'users/' + currentUser.email + '/address'), {
+                address: address
+            });
+        }
+        navigation.navigate("FirstLoginPhone");
+    };
 
     
 

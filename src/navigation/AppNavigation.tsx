@@ -67,7 +67,7 @@ const AppNavigation = ({navigationRef}: { navigationRef: any }) => {
     return (
         <NavigationContainer ref={navigationRef} theme={theme}>
             {/*<AuthStack />*/}
-            <Register/>
+            <FirstLoginAddress/>
         </NavigationContainer>
     );
 };
