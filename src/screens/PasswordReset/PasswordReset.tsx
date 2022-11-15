@@ -5,6 +5,8 @@ import {Feather} from "@expo/vector-icons";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
 import {useNavigation} from "@react-navigation/native";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../../../firebaseConfig";
 
 import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
@@ -13,11 +15,16 @@ import Logo from "../../../assets/logo/logoMockWhite.png";
 
 import COLORS from "../../constants/colors";
 import styles from "./styles/PasswordReset.styles";
+import { validateEmail } from "../../utils/validators";
 
 type PasswordResetScreenProp = NativeStackNavigationProp<RootStackParamList>;
 
 const PasswordReset = () => {
     const [email, setEmail] = useState("");
+    const [isEmailInvalid, setIsEmailInvalid] = useState(false);
+    const [wasEmailFocused, setWasEmailFocused] = useState(false);
+    const [passwordResetError, setPasswordResetError] = useState(false);
+    const [passwordResetErrorMessage, setPasswordResetErrorMessage] = useState("");
 
     const navigation = useNavigation<PasswordResetScreenProp>();
 
@@ -26,14 +33,24 @@ const PasswordReset = () => {
     };
 
     const handleEmailChange = (text: string) => {
+        setIsEmailInvalid(!validateEmail(text));
         setEmail(text);
     };
 
+    const handleEmailOutsidePress = () => {
+      setWasEmailFocused(true);
+    }
+
     const handleResetButtonPress = () => {
-        /*sendPasswordResetEmail(auth, email)
-          .then((res) => console.log(res))
-          .catch((error) => console.log(error));*/
-        navigation.navigate("PasswordResetConfirmation");
+        sendPasswordResetEmail(auth, email)
+          .then(() => {
+            setPasswordResetError(false);
+            navigation.navigate("PasswordResetConfirmation");
+          })
+          .catch(() => {
+            setPasswordResetError(true);
+            setPasswordResetErrorMessage("Incorrect email");
+          });
     };
 
     return (
@@ -66,15 +83,19 @@ const PasswordReset = () => {
                         setState={handleEmailChange}
                         placeholder="Email"
                         icon={<Feather name="at-sign" color={COLORS.blood}/>}
+                        isContentInvalid={isEmailInvalid && wasEmailFocused}
+                        errorMessage="Invalid email"
+                        outsideClick={handleEmailOutsidePress}
                     />
                 </Center>
                 <Center marginTop="10%">
+                    {passwordResetError && <Text style={styles.bloodyTextBold}>{passwordResetErrorMessage}</Text>}
                     <CustomButton
                         text="RESET PASSWORD"
                         clickHandler={handleResetButtonPress}
                     />
                 </Center>
-                <Center marginTop="10%">
+                <Center marginTop="5%">
                     <Text style={styles.bloodyText} onPress={handleTakeMeBackPress}>
                         Nevermind, <Text style={styles.bloodyTextBold}>take me back</Text>
                     </Text>

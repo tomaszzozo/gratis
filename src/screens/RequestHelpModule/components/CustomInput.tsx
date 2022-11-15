@@ -19,11 +19,11 @@ const CustomInput = ({
                          placeholder,
                          icon,
                          type = "text",
-                         margin = 18
+                         margin = 18,
                      }: CustomInputProps) => {
     return (
         <Box>
-            <FormControl isInvalid={false} color={COLORS.blood}>
+            <FormControl color={COLORS.blood}>
                 <Box
                     bgColor={COLORS["gamboge orange"]}
                     width={Dimensions.get('window').width * 252 / 320}

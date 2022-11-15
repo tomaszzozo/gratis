@@ -1,14 +1,17 @@
+import { useState, useEffect } from "react";
 import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import { auth } from "../../firebaseConfig";
+import { onAuthStateChanged} from "firebase/auth";
 
 import Login from "../screens/Login/Login";
 import Register from "../screens/Register/Register";
 import PasswordReset from "../screens/PasswordReset/PasswordReset";
 import PasswordResetConfirmation from "../screens/PasswordReset/PasswordResetConfirmation";
-
-import COLORS from "../constants/colors";
 import CallForHelpAreYouSure from "../screens/RequestHelpModule/CallForHelpAreYouSure";
 import CallForHelp from "../screens/RequestHelpModule/CallForHelp";
+
+import COLORS from "../constants/colors";
 
 const theme = {
     ...DefaultTheme,
@@ -59,10 +62,21 @@ const HelpCallStack = () => {
 }
 
 const AppNavigation = ({navigationRef}: { navigationRef: any }) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      })
+    }, [auth]);
+
     return (
         <NavigationContainer ref={navigationRef} theme={theme}>
-            {/*<AuthStack />*/}
-            <HelpCallStack/>
+          {isLoggedIn ? <HelpCallStack /> : <AuthStack />}
         </NavigationContainer>
     );
 };

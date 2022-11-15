@@ -1,27 +1,50 @@
-import {Text} from "react-native";
+import {Dimensions, Text} from "react-native";
 import {Button} from "native-base";
 
-import styles from "./styles/CustomButton.styles";
+import COLORS from "../../constants/colors";
 
 type CustomButtonProps = {
     text: string;
-    marginBottom?: string;
+    margin?: number;
     clickHandler: () => void;
 };
 
+const calculateFontSize = (): number => {
+    let height = Dimensions.get('window').height;
+    if (height >= 1300) return 18;
+    if (height >= 1200) return 17;
+    if (height >= 1100) return 16;
+    if (height >= 1000) return 15;
+    if (height >= 890) return 14;
+    if (height >= 800) return 13;
+    return 12;
+}
+
 const CustomButton = ({
                           text,
-                          marginBottom = "0",
+                          margin = 18,
                           clickHandler,
                       }: CustomButtonProps) => {
     return (
         <Button
-            size="customLg"
-            variant="bloodyRound"
-            mb={marginBottom}
+            width={Dimensions.get('window').width * 252 / 320}
+            height={Dimensions.get('window').height * 42 / 568}
+            maxWidth={400}
+            maxHeight={100}
+            borderRadius={90}
+            backgroundColor={COLORS.blood}
+            shadow={5}
+            marginTop={margin}
+            marginBottom={margin}
             onPress={clickHandler}
         >
-            <Text style={styles.text}>{text}</Text>
+            <Text style={{
+                fontSize: calculateFontSize(),
+                fontFamily: "Lato-Bold",
+                color: COLORS["floral white"]
+            }}>
+                {text}
+            </Text>
         </Button>
     );
 };
