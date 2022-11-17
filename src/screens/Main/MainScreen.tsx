@@ -7,6 +7,7 @@ import AppBar from "../../components/common/AppBar";
 import ImageButton from "../../components/common/ImageButton";
 import COLORS from "../../constants/colors";
 import styles from "./styles/MainScreen.styles";
+import { getAuth } from "firebase/auth";
 
 type MainScreenProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -18,13 +19,15 @@ export default function MainScreen() {
 	const handleRequestHelpPress = () => {
 		navigation.navigate("CallForHelp");
 	};
+	const auth = getAuth();
+	const user = auth.currentUser;
 	return (
 		<View style={styles.container}>
 			<AppBar />
 			<VStack space={5}>
 				<Center marginTop="15%">
 					<Text fontSize="38" fontWeight="bold" color={COLORS["floral white"]}>
-						Hi User 👋
+						Hi {user?.displayName} 👋
 					</Text>
 				</Center>
 				<Center marginTop="10%">
