@@ -13,6 +13,12 @@ const styles = StyleSheet.create({
 		width: "75%",
 		textAlign: "center",
 	},
+	text: {
+		fontSize: 18,
+		color: COLORS["floral white"],
+		textAlign: "center",
+		marginTop: 6,
+	},
 });
 
 export default styles;
