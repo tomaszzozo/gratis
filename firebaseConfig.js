@@ -13,6 +13,7 @@ import { getDatabase } from "firebase/database";
 const firebaseConfig = {
   apiKey: "AIzaSyCDdkCsoMY6idUZR8SHBTMb7TIXCS4grGo",
   authDomain: "gratis-1d2a0.firebaseapp.com",
+  databaseURL: "https://gratis-1d2a0-default-rtdb.firebaseio.com",
   projectId: "gratis-1d2a0",
   storageBucket: "gratis-1d2a0.appspot.com",
   messagingSenderId: "176564361019",

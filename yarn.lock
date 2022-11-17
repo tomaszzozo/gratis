@@ -1191,12 +1191,12 @@
     "node-forge" "^1.2.1"
     "nullthrows" "^1.1.1"
 
-"@expo/config-plugins@^5.0.1", "@expo/config-plugins@~5.0.0", "@expo/config-plugins@~5.0.1":
-  "integrity" "sha512-1OfnsOrfeSkB0VZfT01UjQ5Uq6p+yYbq8yNkj0e99K/6NLHpyvIxj+5tZIV0nQXgkOcqBIABL2uA7lwB8CkaBQ=="
-  "resolved" "https://registry.npmjs.org/@expo/config-plugins/-/config-plugins-5.0.1.tgz"
-  "version" "5.0.1"
+"@expo/config-plugins@^5.0.1", "@expo/config-plugins@^5.0.4", "@expo/config-plugins@~5.0.0", "@expo/config-plugins@~5.0.1":
+  "integrity" "sha512-vzUcVpqOMs3h+hyRdhGwk+eGIOhXa5xYdd92yO17RMNHav3v/+ekMbs7XA2c3lepMO8Yd4/5hqmRw9ZTL6jGzg=="
+  "resolved" "https://registry.npmjs.org/@expo/config-plugins/-/config-plugins-5.0.4.tgz"
+  "version" "5.0.4"
   dependencies:
-    "@expo/config-types" "^46.0.0"
+    "@expo/config-types" "^47.0.0"
     "@expo/json-file" "8.2.36"
     "@expo/plist" "0.0.18"
     "@expo/sdk-runtime-versions" "^1.0.0"
@@ -1243,6 +1243,11 @@
   "integrity" "sha512-PXkmOgNwRyBfgVT1HmFZhfh3Qm7WKKyV6mk3/5HJ/LzPh1t+Zs2JrWX8U2YncTLV1QzV7nV8tnkyvszzqnZEzQ=="
   "resolved" "https://registry.npmjs.org/@expo/config-types/-/config-types-46.0.2.tgz"
   "version" "46.0.2"
+
+"@expo/config-types@^47.0.0":
+  "integrity" "sha512-r0pWfuhkv7KIcXMUiNACJmJKKwlTBGMw9VZHNdppS8/0Nve8HZMTkNRFQzTHW1uH3pBj8jEXpyw/2vSWDHex9g=="
+  "resolved" "https://registry.npmjs.org/@expo/config-types/-/config-types-47.0.0.tgz"
+  "version" "47.0.0"
 
 "@expo/config@~7.0.0", "@expo/config@~7.0.1", "@expo/config@7.0.1":
   "integrity" "sha512-4lu0wr45XXJ2MXiLAm2+fmOyy/jjqF3NuDm92fO6nuulRzEEvTP4w3vsibJ690rT81ohtvhpruKhkRs0wSjKWA=="
@@ -2979,12 +2984,12 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/geolocation/-/geolocation-3.0.3.tgz"
   "version" "3.0.3"
 
-"@react-native-firebase/app@16.4.3":
-  "integrity" "sha512-6cXm4D3CIVK3N8WMAz+vL/rzjKmoAuFdtdnjLTYsFU/fsQGcsKkZSGiWfMbZASCwcnspRR1/FjyRC5Y4tzqiuA=="
-  "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-16.4.3.tgz"
-  "version" "16.4.3"
+"@react-native-firebase/app@^16.4.5", "@react-native-firebase/app@16.4.3", "@react-native-firebase/app@16.4.5":
+  "integrity" "sha512-inpayjXGvPDkkAKCm3Cy5EcFFokCqYusaB4gZ5HeHVjLYbr0ce+/Sr6YvcDNy0ZlH3wPY+wpXy7y1YUTifbCtw=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-16.4.5.tgz"
+  "version" "16.4.5"
   dependencies:
-    "@expo/config-plugins" "^5.0.1"
+    "@expo/config-plugins" "^5.0.4"
     "opencollective-postinstall" "^2.0.1"
     "superstruct" "^0.6.2"
 
@@ -2995,6 +3000,11 @@
   dependencies:
     "@expo/config-plugins" "^5.0.1"
     "plist" "^3.0.5"
+
+"@react-native-firebase/database@^16.4.5":
+  "integrity" "sha512-A/X3R/OkGemf07ON6nr9upEqzEtbyxGfchI0OPNxzJJJpVFn/7bM8n/Kvy3RiTqAJfiJZZ2dVY/0v+SLr0MHEg=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/database/-/database-16.4.5.tgz"
+  "version" "16.4.5"
 
 "@react-native/assets@1.0.0":
   "integrity" "sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ=="

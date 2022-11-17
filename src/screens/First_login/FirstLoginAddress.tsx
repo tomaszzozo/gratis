@@ -5,13 +5,13 @@ import {Foundation} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
-import { getDatabase, ref, set } from "firebase/database";
 import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
 import Logo from "../../../assets/logo/logoMockWhite.png";
 import COLORS from "../../constants/colors";
 import styles from "./styles/FirstLogin.styles";
 import auth from '@react-native-firebase/auth';
+import { getDatabase, ref, update } from "firebase/database";
 
 
 type FirstLoginAddress = NativeStackNavigationProp<RootStackParamList>;
@@ -34,12 +34,14 @@ const FirstLoginAddress = () => {
 
     const updateAddress = (address: string) => {
         //update address in firebase based on user email
-        if(address != "" && currentUser != null){
-            //update address in firebase
-            set(ref(getDatabase(), 'users/' + currentUser.email + '/address'), {
-                address: address
-            });
-        }
+        // const db = getDatabase();
+
+        // if(address != "" && currentUser != null){
+        //     //update address in firebase
+        //     update(ref(db, 'users/' + currentUser.email + '/address'), {
+        //         address: address
+        //     });
+        // }
         navigation.navigate("FirstLoginPhone");
     };
 
