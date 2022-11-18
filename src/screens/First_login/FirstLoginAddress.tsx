@@ -39,7 +39,7 @@ const FirstLoginAddress = () => {
         //update address in firebase based on user email
         if(address != "" && user != null){
             //update address in firebase
-            database().ref('users/' + user.email).update({
+            database().ref('users/' + user.uid).update({
                 address: address
             });
         }
