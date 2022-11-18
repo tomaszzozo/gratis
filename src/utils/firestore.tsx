@@ -1,16 +1,14 @@
 import {collection, deleteDoc, doc, getDocs, query, setDoc, where} from "firebase/firestore";
 import {dbFirestore} from "../../firebaseConfig";
 
-type setDataProps = {
-    collection: string,
-    fileName: string,
-    data: object
-}
-
 /**
  * Can create and overwrite data
  */
-const setData = async ({collection, fileName, data}: setDataProps) => {
+const setData = async ({collection, fileName, data}: {
+    collection: string,
+    fileName: string,
+    data: object
+}) => {
     await setDoc(doc(dbFirestore, collection, fileName), data);
 }
 
