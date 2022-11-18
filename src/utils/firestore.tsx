@@ -62,9 +62,7 @@ export const getUsersWhoWantToHelp = async (username: string): Promise<Array<{ u
                 where("wantToHelpUser", "==", username)));
     let toReturn: Array<{ username: string, phoneNumber: string }> = [];
     querySnapshot.forEach((doc) => {
-        if (doc.data().wantToHelpUser == username) {
-            toReturn.push({username: doc.id, phoneNumber: doc.data().phoneNumber});
-        }
+        toReturn.push({username: doc.id, phoneNumber: doc.data().phoneNumber});
     });
     return toReturn;
 }
@@ -75,4 +73,19 @@ export const getUsersWhoWantToHelp = async (username: string): Promise<Array<{ u
  */
 export const declineHelpFromUser = async (username: string) => {
     await deleteData("UsersWantingToHelp", username);
+}
+
+/**
+ * Used to clean users wanting to help someone who is no longer in need of any help
+ * @param username user that cancelled requesting for help
+ */
+export const deleteEveryoneWhoWantedToHelpUser = async (username: string) => {
+    const querySnapshot = await
+        getDocs(
+            query(
+                collection(dbFirestore, "UsersWantingToHelp"),
+                where("wantToHelpUser", "==", username)));
+    querySnapshot.forEach((doc) => {
+        deleteData("UsersWantingToHelp", doc.id);
+    })
 }

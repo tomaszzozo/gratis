@@ -14,7 +14,7 @@ import {useNavigation} from "@react-navigation/native";
 import * as Location from 'expo-location';
 import {
     addUserRequestingHelp,
-    declineHelpFromUser,
+    declineHelpFromUser, deleteEveryoneWhoWantedToHelpUser,
     deleteUserRequestingHelp,
     getUsersWhoWantToHelp
 } from "../../utils/firestore";
@@ -128,8 +128,11 @@ const CallForHelp = () => {
                     </Box>
                     <Box style={styles.cancelButtonPosition}>
                         <CustomButton text="CANCEL" margin={0} clickHandler={async () => {
-                            // TODO: go to main screen
                             await deleteUserRequestingHelp(username);
+                            // TODO: uncomment on release,
+                            //  for now leave it so we don't have to create new mock data every god damn time
+                            // await deleteEveryoneWhoWantedToHelpUser(username);
+                            // TODO: go to main screen
                             throw new Error("Not implemented")
                         }}/>
                     </Box>
