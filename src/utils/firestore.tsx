@@ -1,4 +1,4 @@
-import {doc, setDoc, deleteDoc} from "firebase/firestore";
+import {collection, deleteDoc, doc, getDocs, query, setDoc, where} from "firebase/firestore";
 import {dbFirestore} from "../../firebaseConfig";
 
 type setDataProps = {
@@ -14,7 +14,7 @@ const setData = async ({collection, fileName, data}: setDataProps) => {
     await setDoc(doc(dbFirestore, collection, fileName), data);
 }
 
-async function deleteData(collection: string, fileName: string) {
+const deleteData = async (collection: string, fileName: string) => {
     await deleteDoc(doc(dbFirestore, collection, fileName));
 }
 
@@ -27,7 +27,7 @@ async function deleteData(collection: string, fileName: string) {
  * @param longitude current longitude
  * @param timestamp Date class instance that will be saved as timestamp.toString()
  */
-export async function addUserRequestingHelp(username: string, latitude: string, longitude: string, timestamp: Date) {
+export const addUserRequestingHelp = async (username: string, latitude: string, longitude: string, timestamp: Date) => {
     await setData({
         collection: "UsersRequestingHelp",
         fileName: username,
@@ -39,6 +39,22 @@ export async function addUserRequestingHelp(username: string, latitude: string, 
     })
 }
 
-export async function deleteUserRequestingHelp(username: string) {
+
+export const deleteUserRequestingHelp = async (username: string) => {
     await deleteData("UsersRequestingHelp", username);
+}
+
+export const getUsersWhoWantToHelp = async (username: string): Promise<Array<{ username: string, phoneNumber: string }>> => {
+    const querySnapshot = await
+        getDocs(
+            query(
+                collection(dbFirestore, "UsersWantingToHelp"),
+                where("wantToHelpUser", "==", username)));
+    let toReturn: Array<{ username: string, phoneNumber: string }> = [];
+    querySnapshot.forEach((doc) => {
+        if (doc.data().helpWanted && doc.data().wantToHelpUser == username) {
+            toReturn.push({username: doc.id, phoneNumber: doc.data().phoneNumber});
+        }
+    });
+    return toReturn;
 }
