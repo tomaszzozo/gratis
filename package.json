@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^14.4.3",
     "expo": "^46.0.0",
     "expo-constants": "~13.2.4",
+    "expo-linking": "^3.2.3",
     "expo-location": "~14.3.0",
     "expo-splash-screen": "^0.16.2",
     "firebase": "^9.13.0",

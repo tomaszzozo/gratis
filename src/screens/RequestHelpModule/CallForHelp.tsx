@@ -18,10 +18,12 @@ import {
     deleteUserRequestingHelp,
     getUsersWhoWantToHelp
 } from "../../utils/firestore";
+import * as Linking from "expo-linking"
 
 
 const CallForHelp = () => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const username = "mockUsername";
 
     const [coords, setCoords] = useState<{ latitude: string, longitude: string }>({latitude: "", longitude: ""});
     const [lastRefresh, setLastRefresh] = useState("");
@@ -33,10 +35,10 @@ const CallForHelp = () => {
             latitude: location.coords.latitude.toString().substring(0, 9),
             longitude: location.coords.longitude.toString().substring(0, 9)
         })
-        setUsersWhoWantToHelp(await getUsersWhoWantToHelp("mockUsername"));
+        setUsersWhoWantToHelp(await getUsersWhoWantToHelp(username));
         const date = new Date();
         await addUserRequestingHelp(
-            "mockUsername",
+            username,
             location.coords.latitude.toString().substring(0, 9),
             location.coords.longitude.toString().substring(0, 9),
             date);
@@ -49,7 +51,8 @@ const CallForHelp = () => {
             <Box style={styles.cardsSection}>
                 {usersWhoWantToHelp.map((key, index) => {
                     return <HelpingUserCard key={index} username={key.username} phoneIconClickHandler={() => {
-                        throw new Error("Not implemented")
+                        Linking.openURL(`tel:${key.phoneNumber}`);
+                        console.log(`calling ${key.phoneNumber}`);
                     }} cancelIconClickHandler={async () => {
                         await declineHelpFromUser(key.username)
                         await updateData();
@@ -126,7 +129,7 @@ const CallForHelp = () => {
                     <Box style={styles.cancelButtonPosition}>
                         <CustomButton text="CANCEL" margin={0} clickHandler={async () => {
                             // TODO: go to main screen
-                            await deleteUserRequestingHelp("mockUsername");
+                            await deleteUserRequestingHelp(username);
                             throw new Error("Not implemented")
                         }}/>
                     </Box>

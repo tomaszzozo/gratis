@@ -42,6 +42,10 @@ export const addUserRequestingHelp = async (username: string, latitude: string, 
     })
 }
 
+/**
+ * Cleanup after cancellation of requesting help.
+ * @param username user that cancels requesting help
+ */
 export const deleteUserRequestingHelp = async (username: string) => {
     await deleteData("UsersRequestingHelp", username);
 }
