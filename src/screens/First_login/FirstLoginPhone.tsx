@@ -6,7 +6,7 @@ import {useNavigation} from "@react-navigation/native";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
 import database from '@react-native-firebase/database';
-import { getAuth } from "firebase/auth";
+import {getAuth} from "firebase/auth";
 import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
 import Logo from "../../../assets/logo/logoMockWhite.png";
@@ -26,7 +26,7 @@ const FirstLoginPhone = () => {
     const handleContinue = () => {
         const updatePhone = (phone: string) => {
             //update address in firebase based on user email
-            if(phone != "" && user != null){
+            if (phone != "" && user != null) {
                 //update address in firebase
                 database().ref('users/' + user.uid).update({
                     phone: phone
@@ -40,8 +40,6 @@ const FirstLoginPhone = () => {
         setPhone(text);
     };
 
-
-    
 
     return (
         <View style={styles.container}>
@@ -58,13 +56,12 @@ const FirstLoginPhone = () => {
                         setState={handlePhoneChange}
                         placeholder="Phone number"
                         icon={<Foundation name="key" color={COLORS.blood}/>}
-                        marginTop="5%"
+                        isContentInvalid={false}
                     />
                 </Center>
                 <Center marginTop="10%">
                     <CustomButton
                         text="CONTINUE"
-                        marginBottom="5%"
                         clickHandler={handleContinue}
                     />
                 </Center>
