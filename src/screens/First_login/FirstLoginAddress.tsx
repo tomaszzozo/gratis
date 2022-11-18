@@ -11,7 +11,8 @@ import Logo from "../../../assets/logo/logoMockWhite.png";
 import COLORS from "../../constants/colors";
 import styles from "./styles/FirstLogin.styles";
 import database from '@react-native-firebase/database';
-import app from '@react-native-firebase/app';
+import { getAuth } from "firebase/auth";
+
 
 
 
@@ -19,7 +20,8 @@ type FirstLoginAddress = NativeStackNavigationProp<RootStackParamList>;
 
 const FirstLoginAddress = () => {
     const [address, setAddress] = useState("");
-    //const currentUser = app.auth().currentUser;
+    const auth = getAuth();
+    const user = auth.currentUser;
 
     const navigation = useNavigation<FirstLoginAddress>();
 
@@ -35,12 +37,12 @@ const FirstLoginAddress = () => {
 
     const updateAddress = (address: string) => {
         //update address in firebase based on user email
-        // if(address != "" && currentUser != null){
-        //     //update address in firebase
-        //     database().ref('users/' + currentUser.email).update({
-        //         address: address
-        //     });
-        // }
+        if(address != "" && user != null){
+            //update address in firebase
+            database().ref('users/' + user.email).update({
+                address: address
+            });
+        }
         navigation.navigate("FirstLoginPhone");
     };
 

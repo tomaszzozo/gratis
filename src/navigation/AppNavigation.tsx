@@ -38,8 +38,7 @@ const AuthStack = () => {
     return (
         <Stack.Navigator
             initialRouteName="Login"
-            screenOptions={{headerShown: false, animation: "none"}}
-        >
+            screenOptions={{headerShown: false, animation: "none"}}>
             <Stack.Screen name="Login" component={Login}/>
             <Stack.Screen name="Register" component={Register}/>
             <Stack.Screen name="PasswordReset" component={PasswordReset}/>

@@ -5,8 +5,8 @@ import {Foundation} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
-import { ref, getDatabase, update } from "firebase/database";
-import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
+import { getAuth } from "firebase/auth";
 import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
 import Logo from "../../../assets/logo/logoMockWhite.png";
@@ -18,20 +18,20 @@ type FirstLoginPhone = NativeStackNavigationProp<RootStackParamList>;
 
 const FirstLoginPhone = () => {
     const [phone, setPhone] = useState("");
-    const currentUser = auth().currentUser;
+    const auth = getAuth();
+    const user = auth.currentUser;
 
     const navigation = useNavigation<FirstLoginPhone>();
 
     const handleContinue = () => {
         const updatePhone = (phone: string) => {
             //update address in firebase based on user email
-            // const db = getDatabase();
-            // if(phone != "" && currentUser != null){
-            //     //update address in firebase
-            //     update(ref(db, 'users/' + currentUser.email + '/phone'), {
-            //         phone: phone
-            //     });
-            // }
+            if(phone != "" && user != null){
+                //update address in firebase
+                database().ref('users/' + user.email).update({
+                    phone: phone
+                });
+            }
             //navigation.navigate("MainMenu");
         };
     };
