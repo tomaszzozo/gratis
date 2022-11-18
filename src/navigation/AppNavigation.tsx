@@ -8,6 +8,9 @@ import Login from "../screens/Login/Login";
 import Register from "../screens/Register/Register";
 import PasswordReset from "../screens/PasswordReset/PasswordReset";
 import PasswordResetConfirmation from "../screens/PasswordReset/PasswordResetConfirmation";
+import FirstLoginAddress from "../screens/First_login/FirstLoginAddress";
+import FirstLoginPhone from "../screens/First_login/FirstLoginPhone";
+import COLORS from "../constants/colors";
 import CallForHelpAreYouSure from "../screens/RequestHelpModule/CallForHelpAreYouSure";
 import CallForHelp from "../screens/RequestHelpModule/CallForHelp";
 import HelpCanceled from "../screens/MapModules/HelpCanceled";
@@ -15,7 +18,6 @@ import MapMode from "../screens/MapModules/MapMode";
 import ExchangeInfo from "../screens/MapModules/ExchangeInfo";
 import NumberSharingActive from "../screens/MapModules/NumberSharingActive";
 
-import COLORS from "../constants/colors";
 
 const theme = {
   ...DefaultTheme,
@@ -26,7 +28,10 @@ const theme = {
 };
 
 export type RootStackParamList = {
+
   Login: undefined;
+  FirstLoginAddress: undefined;
+FirstLoginPhone: undefined;
   Register: undefined;
   PasswordReset: undefined;
   PasswordResetConfirmation: undefined;
@@ -36,25 +41,27 @@ export type RootStackParamList = {
   MapMode: undefined;
   ExchangeInfo: undefined;
   NumberSharingActive: undefined;
+
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AuthStack = () => {
-  return (
-    <Stack.Navigator
-      initialRouteName="Login"
-      screenOptions={{ headerShown: false, animation: "none" }}
-    >
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="PasswordReset" component={PasswordReset} />
-      <Stack.Screen
-        name="PasswordResetConfirmation"
-        component={PasswordResetConfirmation}
-      />
-    </Stack.Navigator>
-  );
+
+    return (
+        <Stack.Navigator
+            initialRouteName="Login"
+            screenOptions={{headerShown: false, animation: "none"}}>
+            <Stack.Screen name="Login" component={Login}/>
+            <Stack.Screen name="Register" component={Register}/>
+            <Stack.Screen name="PasswordReset" component={PasswordReset}/>
+            <Stack.Screen
+                name="PasswordResetConfirmation"
+                component={PasswordResetConfirmation}
+            />
+        </Stack.Navigator>
+    );
+
 };
 
 const HelpCallStack = () => {
@@ -71,6 +78,7 @@ const HelpCallStack = () => {
     </Stack.Navigator>
   );
 };
+
 
 const MapStack = () => {
   return (
@@ -107,6 +115,7 @@ const AppNavigation = ({ navigationRef }: { navigationRef: any }) => {
       {isLoggedIn ? <HelpCallStack /> : <MapStack />}
     </NavigationContainer>
   );
+
 };
 
 export default AppNavigation;
