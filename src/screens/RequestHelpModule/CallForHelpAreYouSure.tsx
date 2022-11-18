@@ -9,9 +9,11 @@ import CustomButton from "./components/CustomButton";
 import {useNavigation} from "@react-navigation/native";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
+import {getAuth} from "firebase/auth";
 
 const isEmailCorrect = (email: string): boolean => {
-    return email == "test"
+    return email == "test"; // TODO: change when navigation between screens is implemented
+    // return email == getAuth().currentUser?.email;
 }
 
 const CallForHelpAreYouSure = () => {
@@ -49,7 +51,8 @@ const CallForHelpAreYouSure = () => {
                         margin={0}
                         text="OK, HELP ME!"
                         clickHandler={() => {
-                            if (isEmailCorrect(email)) navigation.navigate("CallForHelp");
+                            if (!isEmailCorrect(email)) return;
+                            navigation.navigate("CallForHelp");
                         }}
                     />
                 </View>

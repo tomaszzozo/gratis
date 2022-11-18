@@ -12,6 +12,8 @@ import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
 import {useNavigation} from "@react-navigation/native";
 import * as Location from 'expo-location';
+import {addUserRequestingHelp} from "../../utils/firestore";
+
 
 const RenderUsersWhoWantToHelp = () => {
     return (
@@ -49,14 +51,21 @@ const CallForHelp = () => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
     const [coords, setCoords] = useState<{ latitude: string, longitude: string }>({latitude: "", longitude: ""});
-    const [lastRefresh, setLastRefresh] = useState(new Date().toString().substring(16, 24));
+    const [lastRefresh, setLastRefresh] = useState("");
 
-    const getLocation = async () => {
+    const updateData = async () => {
         let location = await Location.getCurrentPositionAsync({});
         setCoords({
             latitude: location.coords.latitude.toString().substring(0, 9),
             longitude: location.coords.longitude.toString().substring(0, 9)
         })
+        let date = new Date();
+        await addUserRequestingHelp(
+            "mockUsername",
+            location.coords.latitude.toString().substring(0, 9),
+            location.coords.longitude.toString().substring(0, 9),
+            date);
+        setLastRefresh(date.toString().substring(16, 24));
     }
 
     useEffect(() => {
@@ -69,16 +78,14 @@ const CallForHelp = () => {
                     longitude: "NO_PERMISSION"
                 })
                 throw new Error("Not implemented")
-            } else {
-                await getLocation()
             }
+            await updateData()
         })();
     }, []);
     useEffect(() => {
-        const interval = setInterval(() => {
-            setLastRefresh(new Date().toString().substring(16, 24));
-            getLocation()
-        }, 5 * 1000);
+        const interval = setInterval(async () => {
+            await updateData()
+        }, 30 * 1000);
         return () => clearInterval(interval);
     }, []);
 
