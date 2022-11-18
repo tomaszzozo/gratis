@@ -35,17 +35,16 @@ const PasswordResetConfirmation = () => {
                     <Text style={styles.whiteTextBold}>All done!</Text>
                 </Center>
                 <Center marginTop="5%">
-                    <Text style={styles.whiteText}>Enter your email addres.</Text>
+                    <Text style={styles.whiteText}>Check your inbox to get your temporary new.</Text>
                     <Text style={styles.whiteText}>
-                        If this is the email associated with your
+                        password.
                     </Text>
                     <Text style={styles.whiteText}>
-                        account, we will send you a temporary
+                        If you don't see our message, be sure to
                     </Text>
                     <Text style={styles.whiteText}>
-                        password that you can use to log in and set
+                        check spam or try again in 15 minutes.
                     </Text>
-                    <Text style={styles.whiteText}>your new password.</Text>
                 </Center>
                 <Center marginTop="15%">
                     <CustomButton text="GO BACK" clickHandler={handleGoBackButtonPress}/>

@@ -1,7 +1,7 @@
 import {Dimensions, Text} from "react-native";
 import {Button} from "native-base";
 
-import COLORS from "../../constants/colors";
+import COLORS from "../../../constants/colors";
 
 type CustomButtonProps = {
     text: string;

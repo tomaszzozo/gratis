@@ -1,6 +1,6 @@
 import React from "react";
-import {Text} from "react-native";
-import {Box, FormControl, Icon, Input, WarningOutlineIcon} from "native-base";
+import {Box, Center, FormControl, Icon, Input, WarningOutlineIcon, Text} from "native-base";
+import {Dimensions} from "react-native";
 
 import COLORS from "../../constants/colors";
 
@@ -9,8 +9,11 @@ type CustomInputProps = {
     setState: (text: string) => void;
     placeholder: string;
     icon: JSX.Element;
-    marginTop?: string;
+    margin?: number;
     type?: "text" | "password";
+    isContentInvalid: boolean;
+    errorMessage?: string;
+    outsideClick?: () => void;
 };
 
 const CustomInput = ({
@@ -18,45 +21,78 @@ const CustomInput = ({
                          setState,
                          placeholder,
                          icon,
-                         marginTop = "0",
                          type = "text",
+                         margin = 18,
+                         isContentInvalid,
+                         errorMessage,
+                         outsideClick
                      }: CustomInputProps) => {
     return (
         <Box>
-            <FormControl isInvalid={true} color={COLORS.blood}>
-                <Box bgColor="red.500" width="80%" borderRadius={20} shadow={5}>
-                    <Input
-                        variant="customInput"
-                        placeholderTextColor={COLORS["floral white"]}
-                        placeholder={placeholder}
-                        size="customLg"
-                        color={COLORS["floral white"]}
-                        mt={marginTop}
-                        type={type}
-                        value={state}
-                        onChangeText={(text: string) => setState(text)}
-                        InputLeftElement={
-                            <Box
-                                bgColor={COLORS["floral white"]}
-                                size="customSm"
-                                variant="roundedBox"
-                            >
-                                <Icon
-                                    as={icon}
-                                    size={8}
-                                    ml="1.5"
-                                    mt="1.5"
-                                    color={COLORS.blood}
-                                />
-                            </Box>
-                        }
-                    />
-                </Box>
-                <FormControl.ErrorMessage
-                    leftIcon={<WarningOutlineIcon size="xs" color={COLORS.blood}/>}
+            <FormControl isInvalid={isContentInvalid} color={COLORS.blood}>
+                <Box
+                    bgColor={COLORS["gamboge orange"]}
+                    width={Dimensions.get('window').width * 252 / 320}
+                    height={Dimensions.get('window').height * 42 / 568}
+                    maxWidth={400}
+                    maxHeight={100}
+                    borderRadius={90}
+                    borderColor={COLORS["floral white"]}
+                    borderWidth={1}
+                    shadow={5}
+                    marginTop={margin}
+                    marginBottom={margin}
                 >
-                    <Text style={{color: COLORS.blood}}>Incorrect password</Text>
-                </FormControl.ErrorMessage>
+                    <Box
+                        bgColor={COLORS["floral white"]}
+                        position={"absolute"}
+                        left={0}
+                        height={Dimensions.get('window').height * 41 / 568}
+                        width={Dimensions.get('window').height * 40.5 / 568}
+                        maxWidth={100}
+                        maxHeight={100}
+                        borderColor={COLORS["floral white"]}
+                        variant="roundedBox"
+                        borderRadius={90}
+                        flexDirection={"row"}
+                        justifyContent={"center"}
+                    >
+                        <Center>
+                            <Icon
+                                as={icon}
+                                height={Dimensions.get('window').height * 16 / 568}
+                                width={Dimensions.get('window').height * 16 / 568}
+                                color={COLORS.blood}
+                            />
+                        </Center>
+                    </Box>
+                    <Center>
+                        <Input
+                            marginTop={"auto"}
+                            marginBottom={"auto"}
+                            variant="customInput"
+                            placeholderTextColor={COLORS["floral white"]}
+                            placeholder={placeholder}
+                            width={Dimensions.get('window').width * 151 / 320}
+                            height={Dimensions.get('window').height * 42 / 568}
+                            maxWidth={400 * 3 / 5}
+                            maxHeight={100}
+                            color={COLORS["floral white"]}
+                            borderWidth={0}
+                            onSubmitEditing={outsideClick}
+                            onBlur={outsideClick}
+                            borderRadius={0}
+                            fontSize={14}
+                            type={type}
+                            style={{fontFamily: "Lato"}}
+                            value={state}
+                            onChangeText={(text: string) => setState(text)}
+                        />
+                    </Center>
+                    <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" color={COLORS.blood} />}>
+                      <Text style={{ color: COLORS.blood }}>{errorMessage}</Text>
+                    </FormControl.ErrorMessage>
+                </Box>
             </FormControl>
         </Box>
     );

@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 
+
 // Optionally import the services that you want to use
 //import {...} from "firebase/auth";
 //import {...} from "firebase/database";
@@ -34,6 +35,7 @@ onAuthStateChanged(auth, (user) => {
     // ...
   }
 });
+
 
 
 // For more information on how to access Firebase in your project,

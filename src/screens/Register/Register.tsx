@@ -7,6 +7,8 @@ import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import {auth} from "../../../firebaseConfig";
+import { updateProfile } from "firebase/auth";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
@@ -15,14 +17,25 @@ import Logo from "../../../assets/logo/logoMockWhite.png";
 
 import COLORS from "../../constants/colors";
 import styles from "./styles/Register.styles";
+import { validateEmail, validateUsername, validatePassword, validateRepeatedPassword } from "../../utils/validators";
 
 type RegisterScreenProp = NativeStackNavigationProp<RootStackParamList>;
 
 const Register = () => {
     const [username, setUsername] = useState("");
+    const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
+    const [wasUsernameFocused, setWasUsernameFocused] = useState(false);
     const [email, setEmail] = useState("");
+    const [isEmailInvalid, setIsEmailInvalid] = useState(false);
+    const [wasEmailFocused, setWasEmailFocused] = useState(false);
     const [password, setPassword] = useState("");
+    const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
+    const [wasPasswordFocused, setWasPasswordFocused] = useState(false);
     const [repeatedPassword, setRepeatedPassword] = useState("");
+    const [isRepeatedPasswordInvalid, setIsRepeatedPasswordInvalid] = useState(false);
+    const [wasRepeatedPasswordFocused, setWasRepeatedPasswordFocused] = useState(false);
+    const [registerError, setRegisterError] = useState(false);
+    const [registerErrorMessage, setRegisterErrorMessage] = useState("");
 
     const navigation = useNavigation<RegisterScreenProp>();
 
@@ -31,29 +44,64 @@ const Register = () => {
     };
 
     const handleUsernameChange = (text: string) => {
+        setIsUsernameInvalid(!validateUsername(text));
         setUsername(text);
     };
 
+    const handleUsernameOutsidePress = () => {
+      setWasUsernameFocused(true);
+    }
+
     const handleEmailChange = (text: string) => {
+        setIsEmailInvalid(!validateEmail(text));
         setEmail(text);
     };
 
+    const handleEmailOutsidePress = () => {
+      setWasEmailFocused(true);
+    }
+
     const handlePasswordChange = (text: string) => {
+        setIsPasswordInvalid(!validatePassword(text));
         setPassword(text);
     };
 
+    const handlePasswordOutsidePress = () => {
+      setWasPasswordFocused(true);
+    }
+
     const handleRepeatedPasswordChange = (text: string) => {
+        setIsRepeatedPasswordInvalid(!validateRepeatedPassword(password, text));
         setRepeatedPassword(text);
     };
 
+    const handleRepeatedPasswordOutsidePress = () => {
+      setWasRepeatedPasswordFocused(true);
+    }
+
     const registerUser = () => {
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredentials) => console.log(userCredentials))
-            .catch((error) => console.log(error));
+        if (!isUsernameInvalid && !isEmailInvalid && !isPasswordInvalid && !isRepeatedPasswordInvalid) {
+          createUserWithEmailAndPassword(auth, email, password)
+            .then((res) => {
+              updateProfile(res.user, {
+                displayName: username,
+              }).then(() => {
+                setRegisterError(false);
+              }).catch((error) => console.log(error));
+            })
+            .catch((error) => {
+              setRegisterError(true);
+              if (error.message.includes("email")) {
+                setRegisterErrorMessage("Incorrect email");
+              } else {
+                setRegisterErrorMessage("Incorrect password");
+              }
+            });
+        }
     };
 
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container}>
             <VStack>
                 <Center marginTop="15%">
                     <Image source={Logo} style={styles.logo}/>
@@ -67,37 +115,45 @@ const Register = () => {
                         setState={handleUsernameChange}
                         placeholder="Username"
                         icon={<MaterialIcons name="person"/>}
-                        marginTop="10%"
+                        isContentInvalid={isUsernameInvalid && wasUsernameFocused}
+                        errorMessage="Username must be at least 5 characters long"
+                        outsideClick={handleUsernameOutsidePress}
                     />
                     <CustomInput
                         state={email}
                         setState={handleEmailChange}
                         placeholder="Email"
                         icon={<Feather name="at-sign" color={COLORS.blood}/>}
-                        marginTop="5%"
+                        isContentInvalid={isEmailInvalid && wasEmailFocused}
+                        errorMessage="Invalid email"
+                        outsideClick={handleEmailOutsidePress}
                     />
                     <CustomInput
                         state={password}
                         setState={handlePasswordChange}
                         placeholder="Password"
                         icon={<Foundation name="key" color={COLORS.blood}/>}
-                        marginTop="5%"
                         type="password"
+                        isContentInvalid={isPasswordInvalid && wasPasswordFocused}
+                        errorMessage="Password must be at least 6 characters long"
+                        outsideClick={handlePasswordOutsidePress}
                     />
                     <CustomInput
                         state={repeatedPassword}
                         setState={handleRepeatedPasswordChange}
                         placeholder="Repeat password"
                         icon={<Foundation name="key" color={COLORS.blood}/>}
-                        marginTop="5%"
                         type="password"
+                        isContentInvalid={isRepeatedPasswordInvalid && wasRepeatedPasswordFocused}
+                        errorMessage="Provided passwords are not identical"
+                        outsideClick={handleRepeatedPasswordOutsidePress}
                     />
                 </Center>
 
-                <Center marginTop="15%">
+                <Center marginTop="8%">
+                    {registerError && <Text style={styles.textBold}>{registerErrorMessage}</Text>}
                     <CustomButton
                         text="SIGN UP"
-                        marginBottom="5%"
                         clickHandler={registerUser}
                     />
                     <Text style={styles.text} onPress={handleSignInPress}>
@@ -106,7 +162,7 @@ const Register = () => {
                     </Text>
                 </Center>
             </VStack>
-        </View>
+        </KeyboardAwareScrollView>
     );
 };
 
