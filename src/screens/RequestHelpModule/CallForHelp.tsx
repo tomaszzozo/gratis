@@ -12,22 +12,13 @@ import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
 import {useNavigation} from "@react-navigation/native";
 import * as Location from 'expo-location';
-import {addUserRequestingHelp, deleteUserRequestingHelp, getUsersWhoWantToHelp} from "../../utils/firestore";
+import {
+    addUserRequestingHelp,
+    declineHelpFromUser,
+    deleteUserRequestingHelp,
+    getUsersWhoWantToHelp
+} from "../../utils/firestore";
 
-
-const RenderUsersWhoWantToHelp = (usersWhoWantToHelp: Array<{ username: string, phoneNumber: string }>) => {
-    return usersWhoWantToHelp.length > 0 ? (
-        <Box style={styles.cardsSection}>
-            {usersWhoWantToHelp.map((key, index) => {
-                return <HelpingUserCard key={index} username={key.username} phoneIconClickHandler={() => {
-                    throw new Error("Not implemented")
-                }} cancelIconClickHandler={() => {
-                    throw new Error("Not implemented")
-                }}/>
-            })}
-        </Box>
-    ) : <></>;
-}
 
 const CallForHelp = () => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -51,6 +42,21 @@ const CallForHelp = () => {
             date);
         setLastRefresh(date.toString().substring(16, 24));
 
+    }
+
+    const RenderUsersWhoWantToHelp = (usersWhoWantToHelp: Array<{ username: string, phoneNumber: string }>) => {
+        return usersWhoWantToHelp.length > 0 ? (
+            <Box style={styles.cardsSection}>
+                {usersWhoWantToHelp.map((key, index) => {
+                    return <HelpingUserCard key={index} username={key.username} phoneIconClickHandler={() => {
+                        throw new Error("Not implemented")
+                    }} cancelIconClickHandler={async () => {
+                        await declineHelpFromUser(key.username)
+                        await updateData();
+                    }}/>
+                })}
+            </Box>
+        ) : <></>;
     }
 
     useEffect(() => {

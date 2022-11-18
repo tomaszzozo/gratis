@@ -14,6 +14,9 @@ const setData = async ({collection, fileName, data}: setDataProps) => {
     await setDoc(doc(dbFirestore, collection, fileName), data);
 }
 
+/**
+ * Deletes whole file
+ */
 const deleteData = async (collection: string, fileName: string) => {
     await deleteDoc(doc(dbFirestore, collection, fileName));
 }
@@ -39,11 +42,14 @@ export const addUserRequestingHelp = async (username: string, latitude: string, 
     })
 }
 
-
 export const deleteUserRequestingHelp = async (username: string) => {
     await deleteData("UsersRequestingHelp", username);
 }
 
+/**
+ * Returns a list of objects with username and phoneNumber key:value pairs.
+ * @param username username of user who is in need of help
+ */
 export const getUsersWhoWantToHelp = async (username: string): Promise<Array<{ username: string, phoneNumber: string }>> => {
     const querySnapshot = await
         getDocs(
@@ -52,9 +58,17 @@ export const getUsersWhoWantToHelp = async (username: string): Promise<Array<{ u
                 where("wantToHelpUser", "==", username)));
     let toReturn: Array<{ username: string, phoneNumber: string }> = [];
     querySnapshot.forEach((doc) => {
-        if (doc.data().helpWanted && doc.data().wantToHelpUser == username) {
+        if (doc.data().wantToHelpUser == username) {
             toReturn.push({username: doc.id, phoneNumber: doc.data().phoneNumber});
         }
     });
     return toReturn;
+}
+
+/**
+ * Delete user from list of users wanting to help.
+ * @param username username of user you want to delete
+ */
+export const declineHelpFromUser = async (username: string) => {
+    await deleteData("UsersWantingToHelp", username);
 }
