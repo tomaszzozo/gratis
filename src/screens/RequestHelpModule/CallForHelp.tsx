@@ -12,7 +12,7 @@ import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
 import {useNavigation} from "@react-navigation/native";
 import * as Location from 'expo-location';
-import {addUserRequestingHelp} from "../../utils/firestore";
+import {addUserRequestingHelp, deleteUserRequestingHelp} from "../../utils/firestore";
 
 
 const RenderUsersWhoWantToHelp = () => {
@@ -133,8 +133,9 @@ const CallForHelp = () => {
                         </Box>
                     </Box>
                     <Box style={styles.cancelButtonPosition}>
-                        <CustomButton text="CANCEL" margin={0} clickHandler={() => {
+                        <CustomButton text="CANCEL" margin={0} clickHandler={async () => {
                             // TODO: go to main screen
+                            await deleteUserRequestingHelp("mockUsername");
                             throw new Error("Not implemented")
                         }}/>
                     </Box>

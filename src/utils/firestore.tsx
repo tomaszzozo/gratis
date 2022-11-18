@@ -1,4 +1,4 @@
-import {doc, setDoc} from "firebase/firestore";
+import {doc, setDoc, deleteDoc} from "firebase/firestore";
 import {dbFirestore} from "../../firebaseConfig";
 
 type setDataProps = {
@@ -12,6 +12,10 @@ type setDataProps = {
  */
 const setData = async ({collection, fileName, data}: setDataProps) => {
     await setDoc(doc(dbFirestore, collection, fileName), data);
+}
+
+async function deleteData(collection: string, fileName: string) {
+    await deleteDoc(doc(dbFirestore, collection, fileName));
 }
 
 /**
@@ -33,4 +37,8 @@ export async function addUserRequestingHelp(username: string, latitude: string, 
             timestamp: timestamp.toString()
         }
     })
+}
+
+export async function deleteUserRequestingHelp(username: string) {
+    await deleteData("UsersRequestingHelp", username);
 }
