@@ -12,6 +12,7 @@ import COLORS from "../../constants/colors";
 import styles from "./styles/FirstLogin.styles";
 import database from '@react-native-firebase/database';
 import {getAuth} from "firebase/auth";
+import {addUserData} from "../../utils/firestore";
 
 
 type FirstLoginAddress = NativeStackNavigationProp<RootStackParamList>;
@@ -19,29 +20,23 @@ type FirstLoginAddress = NativeStackNavigationProp<RootStackParamList>;
 const FirstLoginAddress = () => {
     const [address, setAddress] = useState("");
     const auth = getAuth();
-    const user = auth.currentUser;
+    const userEmail = auth.currentUser?.email;
 
     const navigation = useNavigation<FirstLoginAddress>();
 
-    const handleContinue = () => {
-        //upadate address in firebase based on user email
-        updateAddress(address);
-
+    const handleContinue = async() => {
+        //update address in firebase based on user email
+        
+        if (address != "" && userEmail != null) {
+            //update address in firebase
+            //addUserDataAddress(user.email, address);
+            await addUserData(userEmail, address,"");
+        }
+        
     };
 
     const handleAddressChange = (text: string) => {
         setAddress(text);
-    };
-
-    const updateAddress = (address: string) => {
-        //update address in firebase based on user email
-        if (address != "" && user != null) {
-            //update address in firebase
-            database().ref('users/' + user.uid).update({
-                address: address
-            });
-        }
-        navigation.navigate("FirstLoginPhone");
     };
 
 

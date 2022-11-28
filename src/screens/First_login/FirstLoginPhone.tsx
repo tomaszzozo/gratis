@@ -5,36 +5,48 @@ import {Foundation} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
-import database from '@react-native-firebase/database';
 import {getAuth} from "firebase/auth";
 import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
 import Logo from "../../../assets/logo/logoMockWhite.png";
 import COLORS from "../../constants/colors";
 import styles from "./styles/FirstLogin.styles";
+import { addUserData } from "../../utils/firestore";
+import { doc, getDoc} from "firebase/firestore";
+import {dbFirestore} from "../../../firebaseConfig";
+import { waitFor } from "@testing-library/react-native";
+import firestore from '@react-native-firebase/firestore';
+
 
 
 type FirstLoginPhone = NativeStackNavigationProp<RootStackParamList>;
 
 const FirstLoginPhone = () => {
-    const [phone, setPhone] = useState("");
+    const [userPhone, setPhone] = useState("");
     const auth = getAuth();
-    const user = auth.currentUser;
+    const userEmail = auth.currentUser?.email;
 
     const navigation = useNavigation<FirstLoginPhone>();
 
-    const handleContinue = () => {
-        const updatePhone = (phone: string) => {
-            //update address in firebase based on user email
-            if (phone != "" && user != null) {
-                //update address in firebase
-                database().ref('users/' + user.uid).update({
-                    phone: phone
+    const handleContinue = async() => {
+        //update address in firebase based on user email
+        if (userPhone != "" && userEmail != null) {
+            //update address in firebase
+            firestore()
+                .collection('UsersData')
+                .doc(userEmail) 
+                .update({
+                    phone: userPhone,
+                })
+                .then(() => {
+                    console.log('User updated!');
                 });
-            }
-            //navigation.navigate("MainMenu");
-        };
+
+        }
+        
     };
+
+    
 
     const handlePhoneChange = (text: string) => {
         setPhone(text);
@@ -52,7 +64,7 @@ const FirstLoginPhone = () => {
                 </Center>
                 <Center marginTop="15%">
                     <CustomInput
-                        state={phone}
+                        state={userPhone}
                         setState={handlePhoneChange}
                         placeholder="Phone number"
                         icon={<Foundation name="key" color={COLORS.blood}/>}
