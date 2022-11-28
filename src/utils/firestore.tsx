@@ -1,4 +1,4 @@
-import {collection, deleteDoc, doc, getDocs, query, setDoc, where} from "firebase/firestore";
+import {collection, deleteDoc, doc, Firestore, getDocs, query, setDoc, where, getDoc} from "firebase/firestore";
 import {dbFirestore} from "../../firebaseConfig";
 
 /**
@@ -85,5 +85,22 @@ export const deleteEveryoneWhoWantedToHelpUser = async (username: string) => {
                 where("wantToHelpUser", "==", username)));
     querySnapshot.forEach((doc) => {
         deleteData("UsersWantingToHelp", doc.id);
+    })
+}
+
+/**
+ * Add new user to collection "UsersData"
+ *
+ * @param address address of user
+ * @param email email of user
+ */
+ export const addUserData = async (email:string, address?:string, phone?:string) => {
+    await setData({
+        collection: "UsersData",
+        fileName: email,
+        data: {
+            phone: phone,
+            address: address,
+        }
     })
 }
