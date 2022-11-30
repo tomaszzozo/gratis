@@ -18,6 +18,7 @@ import {addUserData} from "../../utils/firestore";
 type FirstLoginAddress = NativeStackNavigationProp<RootStackParamList>;
 
 const FirstLoginAddress = () => {
+    const [connectionTimeout, setConnectionTimeout] = useState(false);
     const [address, setAddress] = useState("");
     const auth = getAuth();
     const userEmail = auth.currentUser?.email;
@@ -25,12 +26,24 @@ const FirstLoginAddress = () => {
     const navigation = useNavigation<FirstLoginAddress>();
 
     const handleContinue = async() => {
+        setConnectionTimeout(false);
         //update address in firebase based on user email
         
         if (address != "" && userEmail != null) {
+            let rejectTimeout: number | null = setTimeout(() => {
+              setConnectionTimeout(true);
+              clearTimeout(rejectTimeout!);
+              rejectTimeout = null;
+            }, 5000);
             //update address in firebase
             //addUserDataAddress(user.email, address);
-            await addUserData(userEmail, address,"");
+            await addUserData(userEmail, address,"").then(() => {
+              if (rejectTimeout) {
+                clearTimeout(rejectTimeout!);
+                rejectTimeout = null;
+                console.log('User updated!');
+              }
+            });
         }
         
     };
@@ -65,6 +78,7 @@ const FirstLoginAddress = () => {
                     />
                 </Center>
                 <Center marginTop="10%">
+                    {connectionTimeout && <Text style={styles.text}>There was a network problem. Please try again.</Text>}
                     <CustomButton
                         text="CONTINUE"
                         clickHandler={handleContinue}

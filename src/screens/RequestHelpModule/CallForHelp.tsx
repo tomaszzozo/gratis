@@ -25,25 +25,76 @@ const CallForHelp = () => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const username = "mockUsername";
 
+    const [connectionTimeout, setConnectionTimeout] = useState(false);
     const [coords, setCoords] = useState<{ latitude: string, longitude: string }>({latitude: "", longitude: ""});
     const [lastRefresh, setLastRefresh] = useState("");
     const [usersWhoWantToHelp, setUsersWhoWantToHelp] = useState(Array<{ username: string, phoneNumber: string }>);
 
     const updateData = async () => {
-        const location = await Location.getCurrentPositionAsync({});
-        setCoords({
+        setConnectionTimeout(false);
+
+        let rejectTimeout: number | null = setTimeout(() => {
+          setConnectionTimeout(true);
+          clearTimeout(rejectTimeout!);
+          rejectTimeout = null;
+        }, 5000);
+
+        const location = await Location.getCurrentPositionAsync({}).then((res) => {
+          if (rejectTimeout) {
+            clearTimeout(rejectTimeout!);
+            rejectTimeout = null;
+            return res;
+          }
+
+          return null;
+        });
+        
+        if (location !== null) {
+          setCoords({
             latitude: location.coords.latitude.toString().substring(0, 9),
             longitude: location.coords.longitude.toString().substring(0, 9)
-        })
-        setUsersWhoWantToHelp(await getUsersWhoWantToHelp(username));
-        const date = new Date();
-        await addUserRequestingHelp(
-            username,
-            location.coords.latitude.toString().substring(0, 9),
-            location.coords.longitude.toString().substring(0, 9),
-            date);
-        setLastRefresh(date.toString().substring(16, 24));
+          })
 
+          rejectTimeout = setTimeout(() => {
+            setConnectionTimeout(true);
+            clearTimeout(rejectTimeout!);
+            rejectTimeout = null;
+          }, 5000);
+
+          const returnedUsers = await getUsersWhoWantToHelp(username).then((res) => {
+            if (rejectTimeout) {
+              clearTimeout(rejectTimeout!);
+              rejectTimeout = null;
+              return res;
+            }
+
+            return null;
+          })
+
+          if (returnedUsers !== null) {
+            setUsersWhoWantToHelp(returnedUsers);
+
+            const date = new Date();
+
+            rejectTimeout = setTimeout(() => {
+              setConnectionTimeout(true);
+              clearTimeout(rejectTimeout!);
+              rejectTimeout = null;
+            }, 5000);
+
+            await addUserRequestingHelp(
+                username,
+                location.coords.latitude.toString().substring(0, 9),
+                location.coords.longitude.toString().substring(0, 9),
+                date).then(() => {
+                  if (rejectTimeout) {
+                    clearTimeout(rejectTimeout!);
+                    rejectTimeout = null;
+                  }
+                });
+            setLastRefresh(date.toString().substring(16, 24));
+          }
+        }
     }
 
     const RenderUsersWhoWantToHelp = (usersWhoWantToHelp: Array<{ username: string, phoneNumber: string }>) => {
@@ -54,8 +105,31 @@ const CallForHelp = () => {
                         Linking.openURL(`tel:${key.phoneNumber}`);
                         console.log(`calling ${key.phoneNumber}`);
                     }} cancelIconClickHandler={async () => {
-                        await declineHelpFromUser(key.username)
-                        await updateData();
+                        let rejectTimeout: number | null = setTimeout(() => {
+                          setConnectionTimeout(true);
+                          clearTimeout(rejectTimeout!);
+                          rejectTimeout = null;
+                        }, 5000);
+
+                        await declineHelpFromUser(key.username).then(() => {
+                          if (rejectTimeout) {
+                            clearTimeout(rejectTimeout!);
+                            rejectTimeout = null;
+                          }
+                        });
+
+                        rejectTimeout = setTimeout(() => {
+                          setConnectionTimeout(true);
+                          clearTimeout(rejectTimeout!);
+                          rejectTimeout = null;
+                        }, 5000);
+
+                        await updateData().then(() => {
+                          if (rejectTimeout) {
+                            clearTimeout(rejectTimeout!);
+                            rejectTimeout = null;
+                          }
+                        });
                     }}/>
                 })}
             </Box>
@@ -64,21 +138,60 @@ const CallForHelp = () => {
 
     useEffect(() => {
         (async () => {
-            let {status} = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
+            let rejectTimeout: number | null = setTimeout(() => {
+              setConnectionTimeout(true);
+              clearTimeout(rejectTimeout!);
+              rejectTimeout = null;
+            }, 5000);
+
+            let status: Location.PermissionStatus | null = await Location.requestForegroundPermissionsAsync().then((res) => {
+              if (rejectTimeout) {
+                clearTimeout(rejectTimeout!);
+                rejectTimeout = null;
+                return res.status;
+              }
+
+              return null;
+            });
+
+            if (status !== null) {
+              if (status !== 'granted') {
                 // TODO: navigate to main screen
                 setCoords({
                     latitude: "NO_PERMISSION",
                     longitude: "NO_PERMISSION"
                 })
                 throw new Error("Not implemented")
+              }
+              rejectTimeout = setTimeout(() => {
+                setConnectionTimeout(true);
+                clearTimeout(rejectTimeout!);
+                rejectTimeout = null;
+              }, 5000);
+
+              await updateData().then(() => {
+                if (rejectTimeout) {
+                  clearTimeout(rejectTimeout!);
+                  rejectTimeout = null;
+                }
+              });
             }
-            await updateData()
         })();
     }, []);
     useEffect(() => {
         const interval = setInterval(async () => {
-            await updateData()
+            let rejectTimeout: number | null = setTimeout(() => {
+              setConnectionTimeout(true);
+              clearTimeout(rejectTimeout!);
+              rejectTimeout = null;
+            }, 5000);
+
+            await updateData().then(() => {
+              if (rejectTimeout) {
+                clearTimeout(rejectTimeout!);
+                rejectTimeout = null;
+              }
+            });
         }, 30 * 1000);
         return () => clearInterval(interval);
     }, []);
@@ -127,8 +240,20 @@ const CallForHelp = () => {
                         </Box>
                     </Box>
                     <Box style={styles.cancelButtonPosition}>
+                        {connectionTimeout && <Text style={styles.errorText}>There was a network problem. Some information may be incorrect.</Text>}
                         <CustomButton text="CANCEL" margin={0} clickHandler={async () => {
-                            await deleteUserRequestingHelp(username);
+                            let rejectTimeout: number | null = setTimeout(() => {
+                              setConnectionTimeout(true);
+                              clearTimeout(rejectTimeout!);
+                              rejectTimeout = null;
+                            }, 5000);
+
+                            await deleteUserRequestingHelp(username).then(() => {
+                              if (rejectTimeout) {
+                                clearTimeout(rejectTimeout!);
+                                rejectTimeout = null;
+                              }
+                            });
                             // TODO: uncomment on release,
                             //  for now leave it so we don't have to create new mock data every god damn time
                             // await deleteEveryoneWhoWantedToHelpUser(username);

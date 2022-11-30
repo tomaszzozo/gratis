@@ -22,6 +22,7 @@ import firestore from '@react-native-firebase/firestore';
 type FirstLoginPhone = NativeStackNavigationProp<RootStackParamList>;
 
 const FirstLoginPhone = () => {
+    const [connectionTimeout, setConnectionTimeout] = useState(false);
     const [userPhone, setPhone] = useState("");
     const auth = getAuth();
     const userEmail = auth.currentUser?.email;
@@ -29,8 +30,15 @@ const FirstLoginPhone = () => {
     const navigation = useNavigation<FirstLoginPhone>();
 
     const handleContinue = async() => {
+        setConnectionTimeout(false);
         //update address in firebase based on user email
         if (userPhone != "" && userEmail != null) {
+            let rejectTimeout: number | null = setTimeout(() => {
+              setConnectionTimeout(true);
+              clearTimeout(rejectTimeout!);
+              rejectTimeout = null;
+            }, 5000);
+
             //update address in firebase
             firestore()
                 .collection('UsersData')
@@ -39,7 +47,11 @@ const FirstLoginPhone = () => {
                     phone: userPhone,
                 })
                 .then(() => {
-                    console.log('User updated!');
+                    if (rejectTimeout) {
+                      clearTimeout(rejectTimeout!);
+                      rejectTimeout = null;
+                      console.log('User updated!');
+                    }
                 });
 
         }
@@ -72,6 +84,7 @@ const FirstLoginPhone = () => {
                     />
                 </Center>
                 <Center marginTop="10%">
+                    {connectionTimeout && <Text style={styles.text}>There was a network problem. Please try again.</Text>}
                     <CustomButton
                         text="CONTINUE"
                         clickHandler={handleContinue}
