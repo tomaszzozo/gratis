@@ -8,34 +8,37 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/AppNavigation";
 
+type HelpCanceledProp = NativeStackNavigationProp<RootStackParamList>;
+
 const HelpCanceled = () => {
-  useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+	useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+	const navigation = useNavigation<HelpCanceledProp>();
 
-  return (
-    <View style={styles.wrapper}>
-      <Center>
-        <InfoOutlineIcon style={styles.infoIcon} />
-        <Text style={styles.infoHeader}>Rescue operation cancelled</Text>
-      </Center>
+	return (
+		<View style={styles.wrapper}>
+			<Center>
+				<InfoOutlineIcon style={styles.infoIcon} />
+				<Text style={styles.infoHeader}>Rescue operation cancelled</Text>
+			</Center>
 
-      <Center>
-        <Text style={styles.paragraph}>
-          User "User name" cancelled the call for help. Thank you for your
-          effort. We hope your kindness will get back to you soon.
-        </Text>
-      </Center>
+			<Center>
+				<Text style={styles.paragraph}>
+					User "User name" cancelled the call for help. Thank you for your
+					effort. We hope your kindness will get back to you soon.
+				</Text>
+			</Center>
 
-      <View>
-        <CustomButton
-          text="GO TO MAIN SCREEN"
-          clickHandler={() => {
-            // TODO: go to main screen
-            throw new Error("Not implemented yet");
-          }}
-        />
-      </View>
-    </View>
-  );
+			<View>
+				<CustomButton
+					text="GO TO MAIN SCREEN"
+					clickHandler={() => {
+						// TODO: go to main screen
+						navigation.navigate("MapMode");
+					}}
+				/>
+			</View>
+		</View>
+	);
 };
 
 export default HelpCanceled;
