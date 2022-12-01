@@ -3,6 +3,7 @@ import { View, Image, Text } from "react-native";
 import { VStack, Center } from "native-base";
 import { Feather, Foundation, Entypo } from "@expo/vector-icons";
 
+import { getAuth, updateEmail } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/AppNavigation";
@@ -13,26 +14,16 @@ import styles from "./styles/AccountSettings.styles";
 import COLORS from "../../constants/colors";
 import { validateEmail, validatePassword } from "../../utils/validators";
 import HomeAppBar from "../../components/common/HomeAppBar";
+import { addUserData } from "../../utils/firestore";
 
 type AccountSettingsProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function AccountSettings(props: any) {
-	const [email, setEmail] = useState("");
-	const [isEmailInvalid, setIsEmailInvalid] = useState(false);
-	const [wasEmailFocused, setWasEmailFocused] = useState(false);
 	const [phone, setPhone] = useState("");
 	const [address, setAddress] = useState("");
+	const [saveSuccess, setSaveSuccess] = useState(false);
 	const [saveError, setSaveError] = useState(false);
 	const [saveErrorMessage, setSaveErrorMessage] = useState("");
-
-	const handleEmailChange = (text: string) => {
-		setIsEmailInvalid(!validateEmail(text));
-		setEmail(text);
-	};
-
-	const handleEmailOutsidePress = () => {
-		setWasEmailFocused(true);
-	};
 
 	const handlePhoneChange = (text: string) => {
 		setPhone(text);
@@ -50,19 +41,25 @@ export default function AccountSettings(props: any) {
 		navigation.navigate("DeleteAccount");
 	};
 
-	const saveUserData = () => {
-		//   if (!isEmailInvalid) {
-		//     signInWithEmailAndPassword(auth, email, password)
-		//         .then(() => {
-		//           setSaveError(false);
-		//         })
-		//         .catch((error : any) => {
-		//           setSaveError(true);
-		//           if (error.message.includes("user")) {
-		//             setSaveErrorMessage("Incorrect email");
-		//           }
-		//         });
-		//   }
+	const handleChangeEmailPress = () => {
+		navigation.navigate("ChangeEmail");
+	};
+
+	const handleSaveInfo = () => {
+		const auth = getAuth();
+		setSaveSuccess(false);
+		setSaveError(false);
+		if (auth.currentUser && auth.currentUser.email) {
+			addUserData(auth.currentUser.email, address, phone)
+				.then((res) => {
+					setSaveSuccess(true);
+				})
+				.catch((error) => {
+					console.log(error);
+					setSaveError(true);
+					setSaveErrorMessage(error.message);
+				});
+		}
 	};
 
 	return (
@@ -73,16 +70,6 @@ export default function AccountSettings(props: any) {
 					<Text style={styles.headerText}>CONTACT INFO</Text>
 				</Center>
 				<Center marginTop="5%">
-					<CustomInput
-						state={email}
-						setState={handleEmailChange}
-						placeholder="Email"
-						icon={<Feather name="at-sign" color={COLORS.blood} />}
-						isContentInvalid={isEmailInvalid && wasEmailFocused}
-						errorMessage="Invalid email"
-						outsideClick={handleEmailOutsidePress}
-						margin={2}
-					/>
 					<CustomInput
 						state={phone}
 						setState={handlePhoneChange}
@@ -102,21 +89,29 @@ export default function AccountSettings(props: any) {
 				</Center>
 				<Center>
 					{saveError && <Text style={styles.textBold}>{saveErrorMessage}</Text>}
-					<CustomButton text="SAVE" clickHandler={saveUserData} />
+					{saveSuccess && <Text style={styles.textBold}>Saved user info</Text>}
+				</Center>
+				<Center>
+					<CustomButton text="SAVE" clickHandler={handleSaveInfo} />
 				</Center>
 				<Center marginTop="5%">
 					<Text style={styles.headerText}>DANGER ZONE</Text>
 				</Center>
-				<Center marginTop="5%">
+				<Center marginTop="3%">
+					<CustomButton
+						text="CHANGE E-MAIL"
+						clickHandler={handleChangeEmailPress}
+						margin={3}
+					/>
 					<CustomButton
 						text="CHANGE PASSWORD"
 						clickHandler={handleChangePasswordPress}
-						margin={0}
+						margin={3}
 					/>
 					<CustomButton
 						text="DELETE ACCOUNT"
 						clickHandler={handleDeleteAccountPress}
-						margin={4}
+						margin={3}
 					/>
 				</Center>
 			</VStack>

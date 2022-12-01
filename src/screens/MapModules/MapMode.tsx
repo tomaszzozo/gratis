@@ -121,7 +121,7 @@ const MapMode = () => {
 
 	return (
 		<>
-			<HomeAppBar text="Exchange info" />
+			<HomeAppBar text="Help others" />
 			<Box style={styles.wrapper}>
 				<Box style={styles.topSection}>
 					<MapView

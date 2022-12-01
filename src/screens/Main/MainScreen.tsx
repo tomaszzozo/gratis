@@ -17,7 +17,7 @@ export default function MainScreen() {
 	const truck = require("../../../assets/stepTruckIsStuck.jpeg");
 	const navigation = useNavigation<MainScreenProp>();
 	const handleRequestHelpPress = () => {
-		navigation.navigate("CallForHelp");
+		navigation.navigate("CallForHelpAreYouSure");
 	};
 	const handleMapPress = () => {
 		navigation.navigate("MapMode");
