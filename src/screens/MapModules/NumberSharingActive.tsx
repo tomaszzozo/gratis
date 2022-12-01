@@ -14,31 +14,42 @@ import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import MapView from "react-native-maps";
 
-const InfoCard = () => {
-  return (
-    <Box style={styles.cardsSection}>
-      <HelpCard
-        username={"gigachad1337"}
-        backIconClickHandler={() => {
-          throw new Error("Not implemented");
-        }}
-        mapIconClickHandler={() => {
-          throw new Error("Not implemented");
-        }}
-      />
-    </Box>
-  );
-};
-
 const MapMode = () => {
+  const username = "mockUsername";
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const InfoCard = () => {
+    return (
+      <Box style={styles.cardsSection}>
+        <HelpCard
+          username={username}
+          backIconClickHandler={() => {
+            navigation.navigate("MapMode");
+          }}
+          mapIconClickHandler={() => {
+            throw new Error("Not implemented");
+          }}
+        />
+      </Box>
+    );
+  };
 
   return (
     <>
       <Ribbon text={"Map Mode"} />
       <Box style={styles.wrapper}>
-        <Box style={styles.topSection}>MAPA</Box>
+        <Box style={styles.topSection}>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: 51.793558,
+              longitude: 19.436893,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          />
+        </Box>
         <Box style={styles.middleSection}>
           <ScrollView h={styles.middleSection.height - 20}>
             <InfoCard />

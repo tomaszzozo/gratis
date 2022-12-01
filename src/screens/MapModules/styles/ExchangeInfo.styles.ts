@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     color: COLORS["floral white"],
     fontSize: calculateFontSize(),
     marginLeft: 10,
+    marginRight: 60,
   },
   bottomCardText2: {
     fontFamily: "Lato",
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   bottomCard: {
     marginTop: 5,
     width: "90%",
-    height: (Dimensions.get("window").height * 32) / 568,
+    height: (Dimensions.get("window").height * 40) / 568,
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
@@ -77,6 +78,10 @@ const styles = StyleSheet.create({
   shareButtonPosition: {
     position: "absolute",
     bottom: 5,
+  },
+  map: {
+    width: "80%",
+    height: "80%",
   },
 });
 

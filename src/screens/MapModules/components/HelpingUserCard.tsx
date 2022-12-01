@@ -7,14 +7,14 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type HelpingUserCardProps = {
   username: string;
-  phoneIconClickHandler: () => void;
-  cancelIconClickHandler: () => void;
+  contactClickHandler: () => void;
+  localizationClickHandler: () => void;
 };
 
 const HelpingUserCard = ({
   username,
-  phoneIconClickHandler,
-  cancelIconClickHandler,
+  contactClickHandler,
+  localizationClickHandler,
 }: HelpingUserCardProps) => {
   return (
     <Box
@@ -67,7 +67,7 @@ const HelpingUserCard = ({
         <Button
           size={(Dimensions.get("window").height * 32) / 568}
           variant={"unstyled"}
-          onPress={phoneIconClickHandler}
+          onPress={contactClickHandler}
         >
           <MaterialIcons
             name="contact-phone"
@@ -78,7 +78,7 @@ const HelpingUserCard = ({
         <Button
           size={(Dimensions.get("window").height * 32) / 568}
           variant={"unstyled"}
-          onPress={cancelIconClickHandler}
+          onPress={localizationClickHandler}
         >
           <MaterialCommunityIcons
             name="map-marker-account-outline"
