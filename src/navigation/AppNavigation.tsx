@@ -8,10 +8,15 @@ import Login from "../screens/Login/Login";
 import Register from "../screens/Register/Register";
 import PasswordReset from "../screens/PasswordReset/PasswordReset";
 import PasswordResetConfirmation from "../screens/PasswordReset/PasswordResetConfirmation";
+import FirstLoginAddress from "../screens/First_login/FirstLoginAddress";
+import FirstLoginPhone from "../screens/First_login/FirstLoginPhone";
+import COLORS from "../constants/colors";
 import CallForHelpAreYouSure from "../screens/RequestHelpModule/CallForHelpAreYouSure";
 import CallForHelp from "../screens/RequestHelpModule/CallForHelp";
-
-import COLORS from "../constants/colors";
+import HelpCanceled from "../screens/MapModules/HelpCanceled";
+import MapMode from "../screens/MapModules/MapMode";
+import ExchangeInfo from "../screens/MapModules/ExchangeInfo";
+import NumberSharingActive from "../screens/MapModules/NumberSharingActive";
 import MainScreen from "../screens/Main/MainScreen";
 import AccountSettings from "../screens/AccountSettings/AccountSettings";
 import ChangePassword from "../screens/AccountSettings/ChangePassword";
@@ -27,15 +32,21 @@ const theme = {
 
 export type RootStackParamList = {
 	Login: undefined;
+	FirstLoginAddress: undefined;
+	FirstLoginPhone: undefined;
 	Register: undefined;
 	PasswordReset: undefined;
 	PasswordResetConfirmation: undefined;
-	CallForHelpAreYouSure: undefined;
-	CallForHelp: undefined;
 	MainScreen: undefined;
 	AccountSettings: undefined;
 	ChangePassword: undefined;
 	DeleteAccount: undefined;
+	CallForHelpAreYouSure: undefined;
+	CallForHelp: undefined;
+	HelpCanceled: undefined;
+	MapMode: undefined;
+	ExchangeInfo: undefined;
+	NumberSharingActive: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -70,6 +81,13 @@ const AppNavigation = ({ navigationRef }: { navigationRef: any }) => {
 							component={CallForHelpAreYouSure}
 						/>
 						<Stack.Screen name="CallForHelp" component={CallForHelp} />
+						<Stack.Screen name="HelpCanceled" component={HelpCanceled} />
+						<Stack.Screen name="MapMode" component={MapMode} />
+						<Stack.Screen name="ExchangeInfo" component={ExchangeInfo} />
+						<Stack.Screen
+							name="NumberSharingActive"
+							component={NumberSharingActive}
+						/>
 					</Stack.Group>
 				) : (
 					<Stack.Group>

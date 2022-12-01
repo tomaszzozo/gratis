@@ -12,73 +12,187 @@ import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../navigation/AppNavigation";
 import {useNavigation} from "@react-navigation/native";
 import * as Location from 'expo-location';
+import {
+    addUserRequestingHelp,
+    declineHelpFromUser, deleteEveryoneWhoWantedToHelpUser,
+    deleteUserRequestingHelp,
+    getUsersWhoWantToHelp
+} from "../../utils/firestore";
+import * as Linking from "expo-linking"
 
-const RenderUsersWhoWantToHelp = () => {
-    return (
-        <Box style={styles.cardsSection}>
-            <HelpingUserCard username={"gigachad"} phoneIconClickHandler={() => {
-                throw new Error("Not implemented")
-            }} cancelIconClickHandler={() => {
-                throw new Error("Not implemented")
-            }}/>
-            <HelpingUserCard username={"janusz"} phoneIconClickHandler={() => {
-                throw new Error("Not implemented")
-            }} cancelIconClickHandler={() => {
-                throw new Error("Not implemented")
-            }}/>
-            <HelpingUserCard username={"1337"} phoneIconClickHandler={() => {
-                throw new Error("Not implemented")
-            }} cancelIconClickHandler={() => {
-                throw new Error("Not implemented")
-            }}/>
-            <HelpingUserCard username={"bogdanBoner"} phoneIconClickHandler={() => {
-                throw new Error("Not implemented")
-            }} cancelIconClickHandler={() => {
-                throw new Error("Not implemented")
-            }}/>
-            <HelpingUserCard username={"megawonsz9"} phoneIconClickHandler={() => {
-                throw new Error("Not implemented")
-            }} cancelIconClickHandler={() => {
-                throw new Error("Not implemented")
-            }}/>
-        </Box>
-    )
-}
 
 const CallForHelp = () => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const username = "mockUsername";
 
+    const [connectionTimeout, setConnectionTimeout] = useState(false);
     const [coords, setCoords] = useState<{ latitude: string, longitude: string }>({latitude: "", longitude: ""});
-    const [lastRefresh, setLastRefresh] = useState(new Date().toString().substring(16, 24));
+    const [lastRefresh, setLastRefresh] = useState("");
+    const [usersWhoWantToHelp, setUsersWhoWantToHelp] = useState(Array<{ username: string, phoneNumber: string }>);
 
-    const getLocation = async () => {
-        let location = await Location.getCurrentPositionAsync({});
-        setCoords({
+    const updateData = async () => {
+        setConnectionTimeout(false);
+
+        let rejectTimeout: number | null = setTimeout(() => {
+          setConnectionTimeout(true);
+          clearTimeout(rejectTimeout!);
+          rejectTimeout = null;
+        }, 5000);
+
+        const location = await Location.getCurrentPositionAsync({}).then((res) => {
+          if (rejectTimeout) {
+            clearTimeout(rejectTimeout!);
+            rejectTimeout = null;
+            return res;
+          }
+
+          return null;
+        });
+        
+        if (location !== null) {
+          setCoords({
             latitude: location.coords.latitude.toString().substring(0, 9),
             longitude: location.coords.longitude.toString().substring(0, 9)
-        })
+          })
+
+          rejectTimeout = setTimeout(() => {
+            setConnectionTimeout(true);
+            clearTimeout(rejectTimeout!);
+            rejectTimeout = null;
+          }, 5000);
+
+          const returnedUsers = await getUsersWhoWantToHelp(username).then((res) => {
+            if (rejectTimeout) {
+              clearTimeout(rejectTimeout!);
+              rejectTimeout = null;
+              return res;
+            }
+
+            return null;
+          })
+
+          if (returnedUsers !== null) {
+            setUsersWhoWantToHelp(returnedUsers);
+
+            const date = new Date();
+
+            rejectTimeout = setTimeout(() => {
+              setConnectionTimeout(true);
+              clearTimeout(rejectTimeout!);
+              rejectTimeout = null;
+            }, 5000);
+
+            await addUserRequestingHelp(
+                username,
+                location.coords.latitude.toString().substring(0, 9),
+                location.coords.longitude.toString().substring(0, 9),
+                date).then(() => {
+                  if (rejectTimeout) {
+                    clearTimeout(rejectTimeout!);
+                    rejectTimeout = null;
+                  }
+                });
+            setLastRefresh(date.toString().substring(16, 24));
+          }
+        }
+    }
+
+    const RenderUsersWhoWantToHelp = (usersWhoWantToHelp: Array<{ username: string, phoneNumber: string }>) => {
+        return usersWhoWantToHelp.length > 0 ? (
+            <Box style={styles.cardsSection}>
+                {usersWhoWantToHelp.map((key, index) => {
+                    return <HelpingUserCard key={index} username={key.username} phoneIconClickHandler={() => {
+                        Linking.openURL(`tel:${key.phoneNumber}`);
+                        console.log(`calling ${key.phoneNumber}`);
+                    }} cancelIconClickHandler={async () => {
+                        let rejectTimeout: number | null = setTimeout(() => {
+                          setConnectionTimeout(true);
+                          clearTimeout(rejectTimeout!);
+                          rejectTimeout = null;
+                        }, 5000);
+
+                        await declineHelpFromUser(key.username).then(() => {
+                          if (rejectTimeout) {
+                            clearTimeout(rejectTimeout!);
+                            rejectTimeout = null;
+                          }
+                        });
+
+                        rejectTimeout = setTimeout(() => {
+                          setConnectionTimeout(true);
+                          clearTimeout(rejectTimeout!);
+                          rejectTimeout = null;
+                        }, 5000);
+
+                        await updateData().then(() => {
+                          if (rejectTimeout) {
+                            clearTimeout(rejectTimeout!);
+                            rejectTimeout = null;
+                          }
+                        });
+                    }}/>
+                })}
+            </Box>
+        ) : <></>;
     }
 
     useEffect(() => {
         (async () => {
-            let {status} = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
+            let rejectTimeout: number | null = setTimeout(() => {
+              setConnectionTimeout(true);
+              clearTimeout(rejectTimeout!);
+              rejectTimeout = null;
+            }, 5000);
+
+            let status: Location.PermissionStatus | null = await Location.requestForegroundPermissionsAsync().then((res) => {
+              if (rejectTimeout) {
+                clearTimeout(rejectTimeout!);
+                rejectTimeout = null;
+                return res.status;
+              }
+
+              return null;
+            });
+
+            if (status !== null) {
+              if (status !== 'granted') {
                 // TODO: navigate to main screen
                 setCoords({
                     latitude: "NO_PERMISSION",
                     longitude: "NO_PERMISSION"
                 })
                 throw new Error("Not implemented")
-            } else {
-                await getLocation()
+              }
+              rejectTimeout = setTimeout(() => {
+                setConnectionTimeout(true);
+                clearTimeout(rejectTimeout!);
+                rejectTimeout = null;
+              }, 5000);
+
+              await updateData().then(() => {
+                if (rejectTimeout) {
+                  clearTimeout(rejectTimeout!);
+                  rejectTimeout = null;
+                }
+              });
             }
         })();
     }, []);
     useEffect(() => {
-        const interval = setInterval(() => {
-            setLastRefresh(new Date().toString().substring(16, 24));
-            getLocation()
-        }, 5 * 1000);
+        const interval = setInterval(async () => {
+            let rejectTimeout: number | null = setTimeout(() => {
+              setConnectionTimeout(true);
+              clearTimeout(rejectTimeout!);
+              rejectTimeout = null;
+            }, 5000);
+
+            await updateData().then(() => {
+              if (rejectTimeout) {
+                clearTimeout(rejectTimeout!);
+                rejectTimeout = null;
+              }
+            });
+        }, 30 * 1000);
         return () => clearInterval(interval);
     }, []);
 
@@ -100,7 +214,7 @@ const CallForHelp = () => {
                 </Box>
                 <Box style={styles.middleSection}>
                     <ScrollView h={styles.middleSection.height - 20}>
-                        <RenderUsersWhoWantToHelp/>
+                        {RenderUsersWhoWantToHelp(usersWhoWantToHelp)}
                     </ScrollView>
                     <Box style={styles.lineSeparatorPosition}>
                         <LineSeparator/>
@@ -126,7 +240,23 @@ const CallForHelp = () => {
                         </Box>
                     </Box>
                     <Box style={styles.cancelButtonPosition}>
-                        <CustomButton text="CANCEL" margin={0} clickHandler={() => {
+                        {connectionTimeout && <Text style={styles.errorText}>There was a network problem. Some information may be incorrect.</Text>}
+                        <CustomButton text="CANCEL" margin={0} clickHandler={async () => {
+                            let rejectTimeout: number | null = setTimeout(() => {
+                              setConnectionTimeout(true);
+                              clearTimeout(rejectTimeout!);
+                              rejectTimeout = null;
+                            }, 5000);
+
+                            await deleteUserRequestingHelp(username).then(() => {
+                              if (rejectTimeout) {
+                                clearTimeout(rejectTimeout!);
+                                rejectTimeout = null;
+                              }
+                            });
+                            // TODO: uncomment on release,
+                            //  for now leave it so we don't have to create new mock data every god damn time
+                            // await deleteEveryoneWhoWantedToHelpUser(username);
                             // TODO: go to main screen
                             throw new Error("Not implemented")
                         }}/>

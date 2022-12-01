@@ -79,6 +79,10 @@ const styles = StyleSheet.create({
         color: COLORS["floral white"],
         fontSize: calculateFontSize(),
         marginLeft: 10
+    },
+    errorText: {
+      fontSize: 12,
+      color: COLORS.blood,
     }
 });
 
