@@ -33,7 +33,7 @@ const HelpCanceled = () => {
 					text="GO TO MAIN SCREEN"
 					clickHandler={() => {
 						// TODO: go to main screen
-						navigation.navigate("MapMode");
+						navigation.navigate("MainScreen");
 					}}
 				/>
 			</View>

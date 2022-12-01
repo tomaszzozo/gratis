@@ -5,64 +5,67 @@ import { Feather, Foundation, Entypo, MaterialIcons } from "@expo/vector-icons";
 
 import {
 	getAuth,
-	updatePassword,
+	updateEmail,
 	reauthenticateWithCredential,
 	EmailAuthProvider,
 } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/AppNavigation";
+import { validateEmail } from "../../utils/validators";
 
 import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
 import styles from "./styles/AccountSettings.styles";
 import COLORS from "../../constants/colors";
-import { validatePassword } from "../../utils/validators";
 import HomeAppBar from "../../components/common/HomeAppBar";
 
 type ChangePasswordProp = NativeStackNavigationProp<RootStackParamList>;
 
-export default function ChangePassword(props: any) {
-	const [oldPassword, setOldPassword] = useState("");
+export default function ChangeEmail(props: any) {
+	const [email, setEmail] = useState("");
+	const [isEmailInvalid, setIsEmailInvalid] = useState(false);
+	const [wasEmailFocused, setWasEmailFocused] = useState(false);
 	const [password, setPassword] = useState("");
-	const [repeatPassword, setRepeatPassword] = useState("");
 	const [saveError, setSaveError] = useState(false);
 	const [saveErrorMessage, setSaveErrorMessage] = useState("");
-	const [passwordChanged, setPasswordChanged] = useState(false);
+	const [emailChanged, setEmailChanged] = useState(false);
 
-	const handleOldPasswordChange = (text: string) => {
-		setOldPassword(text);
+	const handleEmailChange = (text: string) => {
+		setIsEmailInvalid(!validateEmail(text));
+		setEmail(text);
+	};
+
+	const handleEmailOutsidePress = () => {
+		setWasEmailFocused(true);
 	};
 
 	const handlePasswordChange = (text: string) => {
 		setPassword(text);
-	};
-	const handleRepeatPasswordChange = (text: string) => {
-		setRepeatPassword(text);
 	};
 
 	const navigation = useNavigation<ChangePasswordProp>();
 	const handleBackPress = () => {
 		navigation.navigate("AccountSettings");
 	};
-	const handleChangePasswordPress = () => {
+	const handleChangeEmailPress = () => {
 		const auth = getAuth();
 		const user = auth.currentUser;
 		let credential;
 		if (auth && auth.currentUser && auth.currentUser.email)
 			credential = EmailAuthProvider.credential(
 				auth.currentUser.email,
-				oldPassword
+				password
 			);
 		else throw new Error("Failed to get auth!");
 		if (user) {
 			reauthenticateWithCredential(user, credential)
 				.then((res) => {
 					console.log(res);
-					updatePassword(user, password)
+					updateEmail(user, email)
 						.then(() => {
 							setSaveError(false);
-							setPasswordChanged(true);
+							setEmailChanged(true);
 						})
 						.catch((error) => {
 							console.log(error);
@@ -85,45 +88,37 @@ export default function ChangePassword(props: any) {
 			<VStack>
 				<HomeAppBar text="Profile" />
 				<Center marginTop="5%">
-					<Text style={styles.headerText}>PASSWORD CHANGE</Text>
+					<Text style={styles.headerText}>E-MAIL CHANGE</Text>
 				</Center>
 				<Center marginTop="5%">
 					<CustomInput
-						state={oldPassword}
-						setState={handleOldPasswordChange}
-						placeholder="Old password"
+						state={password}
+						setState={handlePasswordChange}
+						placeholder="Password"
 						icon={<MaterialIcons name="lock-clock" color={COLORS.blood} />}
 						errorMessage="Invalid password"
 						isContentInvalid={false}
 						margin={2}
 					/>
 					<CustomInput
-						state={password}
-						setState={handlePasswordChange}
-						placeholder="New password"
-						icon={<Foundation name="key" color={COLORS.blood} />}
-						isContentInvalid={false}
-						margin={2}
-					/>
-					<CustomInput
-						state={repeatPassword}
-						setState={handleRepeatPasswordChange}
-						placeholder="Repeat new password"
-						icon={<MaterialIcons name="verified" color={COLORS.blood} />}
-						isContentInvalid={false}
+						state={email}
+						setState={handleEmailChange}
+						placeholder="Email"
+						icon={<Feather name="at-sign" color={COLORS.blood} />}
+						isContentInvalid={isEmailInvalid && wasEmailFocused}
+						errorMessage="Invalid email"
+						outsideClick={handleEmailOutsidePress}
 						margin={2}
 					/>
 				</Center>
 				<Center>
 					{saveError && <Text style={styles.textBold}>{saveErrorMessage}</Text>}
-					{passwordChanged && (
-						<Text style={styles.textBold}>Password changed!</Text>
-					)}
+					{emailChanged && <Text style={styles.textBold}>E-mail changed!</Text>}
 				</Center>
 				<Center marginTop="40%">
 					<CustomButton
-						text="CHANGE PASSWORD"
-						clickHandler={handleChangePasswordPress}
+						text="CHANGE E-MAIL"
+						clickHandler={handleChangeEmailPress}
 						margin={0}
 					/>
 					<CustomButton

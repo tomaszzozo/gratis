@@ -46,6 +46,7 @@ const CustomButton = ({
 					fontSize: calculateFontSize(),
 					fontFamily: "Lato-Bold",
 					color: COLORS["floral white"],
+					marginBottom: 4,
 				}}
 			>
 				{text}

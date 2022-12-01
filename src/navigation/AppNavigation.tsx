@@ -21,6 +21,8 @@ import MainScreen from "../screens/Main/MainScreen";
 import AccountSettings from "../screens/AccountSettings/AccountSettings";
 import ChangePassword from "../screens/AccountSettings/ChangePassword";
 import DeleteAccount from "../screens/AccountSettings/DeleteAccount";
+import AccountDeleted from "../screens/AccountSettings/AccountDeleted";
+import ChangeEmail from "../screens/AccountSettings/ChangeEmail";
 
 const theme = {
 	...DefaultTheme,
@@ -40,7 +42,9 @@ export type RootStackParamList = {
 	MainScreen: undefined;
 	AccountSettings: undefined;
 	ChangePassword: undefined;
+	ChangeEmail: undefined;
 	DeleteAccount: undefined;
+	AccountDeleted: undefined;
 	CallForHelpAreYouSure: undefined;
 	CallForHelp: undefined;
 	HelpCanceled: undefined;
@@ -75,6 +79,7 @@ const AppNavigation = ({ navigationRef }: { navigationRef: any }) => {
 						<Stack.Screen name="MainScreen" component={MainScreen} />
 						<Stack.Screen name="AccountSettings" component={AccountSettings} />
 						<Stack.Screen name="ChangePassword" component={ChangePassword} />
+						<Stack.Screen name="ChangeEmail" component={ChangeEmail} />
 						<Stack.Screen name="DeleteAccount" component={DeleteAccount} />
 						<Stack.Screen
 							name="CallForHelpAreYouSure"
@@ -98,6 +103,7 @@ const AppNavigation = ({ navigationRef }: { navigationRef: any }) => {
 							name="PasswordResetConfirmation"
 							component={PasswordResetConfirmation}
 						/>
+						<Stack.Screen name="AccountDeleted" component={AccountDeleted} />
 					</Stack.Group>
 				)}
 			</Stack.Navigator>
