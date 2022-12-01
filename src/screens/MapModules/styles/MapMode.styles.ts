@@ -49,6 +49,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
   },
+  map: {
+    width: "80%",
+    height: "80%",
+  },
 });
 
 export default styles;
