@@ -19,6 +19,9 @@ export default function MainScreen() {
 	const handleRequestHelpPress = () => {
 		navigation.navigate("CallForHelp");
 	};
+	const handleMapPress = () => {
+		navigation.navigate("MapMode");
+	};
 	const auth = getAuth();
 	const user = auth.currentUser;
 	return (
@@ -51,6 +54,7 @@ export default function MainScreen() {
 						text="🗺️ Take a look at the map 🗺️"
 						textColor={COLORS["gamboge orange"]}
 						lowerText="To see who needs help nearby"
+						handlePress={handleMapPress}
 					/>
 				</Center>
 				<Center marginTop="15%">
