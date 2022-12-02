@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Dimensions, Text, View } from "react-native";
-import { Center, Select, VStack, CheckIcon, Box, Icon } from "native-base";
-import { Entypo, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Center, VStack, ScrollView } from "native-base";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { getAuth } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
@@ -87,67 +87,75 @@ export default function AccountSettings() {
     <View style={styles.container}>
       <VStack>
         <HomeAppBar text="Profile" />
-        <Center marginTop="5%">
-          <Text style={styles.headerText}>USER INFO</Text>
-        </Center>
-        <Center marginTop="5%">
-          <CustomInput
-            state={phone}
-            setState={handlePhoneChange}
-            placeholder="Phone"
-            icon={<Entypo name="phone" color={COLORS.blood} />}
-            isContentInvalid={false}
-            margin={2}
-          />
-          <CustomInput
-            state={address}
-            setState={handleAddressChange}
-            placeholder="Address"
-            icon={<Entypo name="home" color={COLORS.blood} />}
-            isContentInvalid={false}
-            margin={2}
-          />
-          <CustomInput
-            state={range}
-            setState={handleRangeChange}
-            placeholder="Help range (km)"
-            icon={
-              <MaterialCommunityIcons
-                name="map-marker-distance"
-                color={COLORS.blood}
-              />
-            }
-            isContentInvalid={false}
-            margin={2}
-          />
-        </Center>
-        <Center>
-          {saveError && <Text style={styles.textBold}>{saveErrorMessage}</Text>}
-          {saveSuccess && <Text style={styles.textBold}>Saved user info</Text>}
-        </Center>
-        <Center>
-          <CustomButton text="SAVE" clickHandler={handleSaveInfo} />
-        </Center>
-        <Center marginTop="5%">
-          <Text style={styles.headerText}>DANGER ZONE</Text>
-        </Center>
-        <Center marginTop="3%">
-          <CustomButton
-            text="CHANGE E-MAIL"
-            clickHandler={handleChangeEmailPress}
-            margin={3}
-          />
-          <CustomButton
-            text="CHANGE PASSWORD"
-            clickHandler={handleChangePasswordPress}
-            margin={3}
-          />
-          <CustomButton
-            text="DELETE ACCOUNT"
-            clickHandler={handleDeleteAccountPress}
-            margin={3}
-          />
-        </Center>
+        <ScrollView h={Dimensions.get("window").height * 0.85}>
+          {" "}
+          // TODO: figure out how to get height of scroll view
+          <Center marginTop="5%">
+            <Text style={styles.headerText}>USER INFO</Text>
+          </Center>
+          <Center marginTop="5%">
+            <CustomInput
+              state={phone}
+              setState={handlePhoneChange}
+              placeholder="Phone"
+              icon={<Entypo name="phone" color={COLORS.blood} />}
+              isContentInvalid={false}
+              margin={2}
+            />
+            <CustomInput
+              state={address}
+              setState={handleAddressChange}
+              placeholder="Address"
+              icon={<Entypo name="home" color={COLORS.blood} />}
+              isContentInvalid={false}
+              margin={2}
+            />
+            <CustomInput
+              state={range}
+              setState={handleRangeChange}
+              placeholder="Help range (km)"
+              icon={
+                <MaterialCommunityIcons
+                  name="map-marker-distance"
+                  color={COLORS.blood}
+                />
+              }
+              isContentInvalid={false}
+              margin={2}
+            />
+          </Center>
+          <Center>
+            {saveError && (
+              <Text style={styles.textBold}>{saveErrorMessage}</Text>
+            )}
+            {saveSuccess && (
+              <Text style={styles.textBold}>Saved user info</Text>
+            )}
+          </Center>
+          <Center>
+            <CustomButton text="SAVE" clickHandler={handleSaveInfo} />
+          </Center>
+          <Center marginTop="5%">
+            <Text style={styles.headerText}>DANGER ZONE</Text>
+          </Center>
+          <Center marginTop="3%">
+            <CustomButton
+              text="CHANGE E-MAIL"
+              clickHandler={handleChangeEmailPress}
+              margin={3}
+            />
+            <CustomButton
+              text="CHANGE PASSWORD"
+              clickHandler={handleChangePasswordPress}
+              margin={3}
+            />
+            <CustomButton
+              text="DELETE ACCOUNT"
+              clickHandler={handleDeleteAccountPress}
+              margin={3}
+            />
+          </Center>
+        </ScrollView>
       </VStack>
     </View>
   );
