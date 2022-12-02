@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, Text, View } from "react-native";
 import { Center, VStack, ScrollView } from "native-base";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -13,7 +13,7 @@ import CustomButton from "../../components/common/CustomButton";
 import styles from "./styles/AccountSettings.styles";
 import COLORS from "../../constants/colors";
 import HomeAppBar from "../../components/common/HomeAppBar";
-import { addUserData } from "../../utils/firestore";
+import { addUserData, getUserData } from "../../utils/firestore";
 import { validateRange } from "../../utils/validators";
 
 type AccountSettingsProp = NativeStackNavigationProp<RootStackParamList>;
@@ -21,10 +21,19 @@ type AccountSettingsProp = NativeStackNavigationProp<RootStackParamList>;
 export default function AccountSettings() {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [range, setRange] = useState("");
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const [saveErrorMessage, setSaveErrorMessage] = useState("");
-  const [range, setRange] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      let data = await getUserData();
+      setPhone(data.phone);
+      setAddress(data.address);
+      setRange(data.range.endsWith(" km") ? data.range : data.range + " km");
+    })();
+  }, []);
 
   const handleRangeChange = (text: string) => {
     setRange(text);

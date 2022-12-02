@@ -2,11 +2,13 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
   setDoc,
   where,
 } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { dbFirestore } from "../../firebaseConfig";
 
 /**
@@ -153,4 +155,26 @@ export const addUserData = async (
       range: range,
     },
   });
+};
+
+export const getUserData = async (): Promise<{
+  address: string;
+  phone: string;
+  range: string;
+}> => {
+  let mail = getAuth().currentUser?.email;
+  if (mail == null) {
+    throw new Error("How did we get here?");
+  }
+  const docRef = doc(dbFirestore, "UsersData", mail);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return {
+      address: docSnap.data().address,
+      phone: docSnap.data().phone,
+      range: docSnap.data().range,
+    };
+  } else {
+    throw new Error("No such document!");
+  }
 };
