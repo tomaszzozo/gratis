@@ -1,26 +1,34 @@
-import {collection, deleteDoc, doc, getDocs, query, setDoc, where,} from "firebase/firestore";
-import {dbFirestore} from "../../firebaseConfig";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
+import { dbFirestore } from "../../firebaseConfig";
 
 /**
  * Can create and overwrite data
  */
 const setData = async ({
-                           collection,
-                           fileName,
-                           data,
-                       }: {
-    collection: string;
-    fileName: string;
-    data: object;
+  collection,
+  fileName,
+  data,
+}: {
+  collection: string;
+  fileName: string;
+  data: object;
 }) => {
-    await setDoc(doc(dbFirestore, collection, fileName), data);
+  await setDoc(doc(dbFirestore, collection, fileName), data);
 };
 
 /**
  * Deletes whole file
  */
 const deleteData = async (collection: string, fileName: string) => {
-    await deleteDoc(doc(dbFirestore, collection, fileName));
+  await deleteDoc(doc(dbFirestore, collection, fileName));
 };
 
 /**
@@ -33,20 +41,20 @@ const deleteData = async (collection: string, fileName: string) => {
  * @param timestamp Date class instance that will be saved as timestamp.toString()
  */
 export const addUserRequestingHelp = async (
-    username: string,
-    latitude: string,
-    longitude: string,
-    timestamp: Date
+  username: string,
+  latitude: string,
+  longitude: string,
+  timestamp: Date
 ) => {
-    await setData({
-        collection: "UsersRequestingHelp",
-        fileName: username,
-        data: {
-            latitude: latitude,
-            longitude: longitude,
-            timestamp: timestamp.toString(),
-        },
-    });
+  await setData({
+    collection: "UsersRequestingHelp",
+    fileName: username,
+    data: {
+      latitude: latitude,
+      longitude: longitude,
+      timestamp: timestamp.toString(),
+    },
+  });
 };
 
 /**
@@ -54,7 +62,7 @@ export const addUserRequestingHelp = async (
  * @param username user that cancels requesting help
  */
 export const deleteUserRequestingHelp = async (username: string) => {
-    await deleteData("UsersRequestingHelp", username);
+  await deleteData("UsersRequestingHelp", username);
 };
 
 /**
@@ -62,40 +70,40 @@ export const deleteUserRequestingHelp = async (username: string) => {
  * @param username username of user who is in need of help
  */
 export const getUsersWhoWantToHelp = async (
-    username: string
+  username: string
 ): Promise<Array<{ username: string; phoneNumber: string }>> => {
-    const querySnapshot = await getDocs(
-        query(
-            collection(dbFirestore, "UsersWantingToHelp"),
-            where("wantToHelpUser", "==", username)
-        )
-    );
-    let toReturn: Array<{ username: string; phoneNumber: string }> = [];
-    querySnapshot.forEach((doc) => {
-        toReturn.push({username: doc.id, phoneNumber: doc.data().phoneNumber});
-    });
-    return toReturn;
+  const querySnapshot = await getDocs(
+    query(
+      collection(dbFirestore, "UsersWantingToHelp"),
+      where("wantToHelpUser", "==", username)
+    )
+  );
+  let toReturn: Array<{ username: string; phoneNumber: string }> = [];
+  querySnapshot.forEach((doc) => {
+    toReturn.push({ username: doc.id, phoneNumber: doc.data().phoneNumber });
+  });
+  return toReturn;
 };
 
 export const getUsersWhoRequestHelp = async () => {
-    const querySnapshot = await getDocs(
-        query(collection(dbFirestore, "UsersRequestingHelp"))
-    );
-    let toReturn: Array<{
-        username: string;
-        latitude: string;
-        longitude: string;
-        timestamp: Date;
-    }> = [];
-    querySnapshot.forEach((doc) => {
-        toReturn.push({
-            username: doc.id,
-            latitude: doc.data().latitude,
-            longitude: doc.data().longitude,
-            timestamp: doc.data().data,
-        });
+  const querySnapshot = await getDocs(
+    query(collection(dbFirestore, "UsersRequestingHelp"))
+  );
+  let toReturn: Array<{
+    username: string;
+    latitude: string;
+    longitude: string;
+    timestamp: Date;
+  }> = [];
+  querySnapshot.forEach((doc) => {
+    toReturn.push({
+      username: doc.id,
+      latitude: doc.data().latitude,
+      longitude: doc.data().longitude,
+      timestamp: doc.data().data,
     });
-    return toReturn;
+  });
+  return toReturn;
 };
 
 /**
@@ -103,7 +111,7 @@ export const getUsersWhoRequestHelp = async () => {
  * @param username username of user you want to delete
  */
 export const declineHelpFromUser = async (username: string) => {
-    await deleteData("UsersWantingToHelp", username);
+  await deleteData("UsersWantingToHelp", username);
 };
 
 /**
@@ -111,15 +119,15 @@ export const declineHelpFromUser = async (username: string) => {
  * @param username user that cancelled requesting for help
  */
 export const deleteEveryoneWhoWantedToHelpUser = async (username: string) => {
-    const querySnapshot = await getDocs(
-        query(
-            collection(dbFirestore, "UsersWantingToHelp"),
-            where("wantToHelpUser", "==", username)
-        )
-    );
-    querySnapshot.forEach((doc) => {
-        deleteData("UsersWantingToHelp", doc.id);
-    });
+  const querySnapshot = await getDocs(
+    query(
+      collection(dbFirestore, "UsersWantingToHelp"),
+      where("wantToHelpUser", "==", username)
+    )
+  );
+  querySnapshot.forEach((doc) => {
+    deleteData("UsersWantingToHelp", doc.id);
+  });
 };
 
 /**
@@ -130,16 +138,16 @@ export const deleteEveryoneWhoWantedToHelpUser = async (username: string) => {
  * @param phone number of user
  */
 export const addUserData = async (
-    email: string,
-    address?: string,
-    phone?: string
+  email: string,
+  address?: string,
+  phone?: string
 ) => {
-    await setData({
-        collection: "UsersData",
-        fileName: email,
-        data: {
-            phone: phone,
-            address: address,
-        },
-    });
+  await setData({
+    collection: "UsersData",
+    fileName: email,
+    data: {
+      phone: phone,
+      address: address,
+    },
+  });
 };
