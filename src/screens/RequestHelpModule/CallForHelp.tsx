@@ -213,7 +213,7 @@ const CallForHelp = () => {
 
   return (
     <>
-      <HomeAppBar text={"Requesting help"} />
+      <HomeAppBar text={"Requesting help"} showHomeIcon={false} />
       <Box style={styles.wrapper}>
         <Box style={styles.topSection}>
           <Text style={styles.topText}>
