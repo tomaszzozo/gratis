@@ -68,7 +68,7 @@ export default function AccountSettings() {
       errorMessage = "Can not save empty address!";
     } else if (range === "") {
       errorMessage = "Can not save empty range!";
-    } else if (!validateRange(range)) {
+    } else if (!validateRange(range.replace("km", "").trim())) {
       errorMessage = "Incorrect range!";
     }
     // TODO: add address and phone number validation
@@ -80,9 +80,12 @@ export default function AccountSettings() {
     setSaveSuccess(false);
     setSaveError(false);
     if (auth.currentUser && auth.currentUser.email) {
-      let r = range;
-      if (r.endsWith("km")) r.substring(0, r.length - 2);
-      addUserData(auth.currentUser.email, address, phone, r.trim())
+      addUserData(
+        auth.currentUser.email,
+        address,
+        phone,
+        range.replace("km", "").trim()
+      )
         .then((res) => {
           setSaveSuccess(true);
         })
