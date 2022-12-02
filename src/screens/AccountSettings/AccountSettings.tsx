@@ -71,7 +71,9 @@ export default function AccountSettings() {
     setSaveSuccess(false);
     setSaveError(false);
     if (auth.currentUser && auth.currentUser.email) {
-      addUserData(auth.currentUser.email, address, phone)
+      let r = range;
+      if (r.endsWith("km")) r.substring(0, r.length - 2);
+      addUserData(auth.currentUser.email, address, phone, r.trim())
         .then((res) => {
           setSaveSuccess(true);
         })

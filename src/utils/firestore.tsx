@@ -136,11 +136,13 @@ export const deleteEveryoneWhoWantedToHelpUser = async (username: string) => {
  * @param address address of user
  * @param email email of user
  * @param phone number of user
+ * @param range the user wants to help in
  */
 export const addUserData = async (
   email: string,
   address?: string,
-  phone?: string
+  phone?: string,
+  range?: string
 ) => {
   await setData({
     collection: "UsersData",
@@ -148,6 +150,7 @@ export const addUserData = async (
     data: {
       phone: phone,
       address: address,
+      range: range,
     },
   });
 };

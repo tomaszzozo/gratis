@@ -20,5 +20,5 @@ export const validateRepeatedPassword = (
 };
 
 export const validateRange = (range: string) => {
-  return /[1-9][0-9]*"km"?/.test(range) || range === "0";
+  return /[1-9][0-9]*/.test(range) || range === "0";
 };
