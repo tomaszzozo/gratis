@@ -87,9 +87,8 @@ export default function AccountSettings() {
     <View style={styles.container}>
       <VStack>
         <HomeAppBar text="Profile" />
+        {/*TODO: figure out how to get height of scroll view*/}
         <ScrollView h={Dimensions.get("window").height * 0.85}>
-          {" "}
-          // TODO: figure out how to get height of scroll view
           <Center marginTop="5%">
             <Text style={styles.headerText}>USER INFO</Text>
           </Center>
