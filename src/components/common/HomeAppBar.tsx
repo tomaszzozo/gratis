@@ -32,7 +32,7 @@ export default function HomeAppBar({
   return (
     <>
       <StatusBar barStyle="light-content" />
-      <Box safeAreaTop bg="violet.600" />
+      <Box safeAreaTop bg={COLORS.blood} />
       <HStack
         bg={COLORS.blood}
         px="1"
