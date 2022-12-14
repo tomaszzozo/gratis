@@ -20,6 +20,8 @@ import {
 } from "../../utils/firestore";
 import * as Linking from "expo-linking";
 
+import { sendPushNotification } from "../../utils/notifications";
+
 const CallForHelp = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -34,10 +36,14 @@ const CallForHelp = () => {
     Array<{ username: string; phoneNumber: string }>
   );
 
+  useEffect(() => {
+    sendPushNotification("");
+  }, []);
+
   const updateData = async () => {
     setConnectionTimeout(false);
 
-    let rejectTimeout: number | null = setTimeout(() => {
+    let rejectTimeout: ReturnType<typeof setTimeout> | null = setTimeout(() => {
       setConnectionTimeout(true);
       clearTimeout(rejectTimeout!);
       rejectTimeout = null;
@@ -119,7 +125,7 @@ const CallForHelp = () => {
                 console.log(`calling ${key.phoneNumber}`);
               }}
               cancelIconClickHandler={async () => {
-                let rejectTimeout: number | null = setTimeout(() => {
+                let rejectTimeout: ReturnType<typeof setTimeout> | null = setTimeout(() => {
                   setConnectionTimeout(true);
                   clearTimeout(rejectTimeout!);
                   rejectTimeout = null;
@@ -156,7 +162,7 @@ const CallForHelp = () => {
 
   useEffect(() => {
     (async () => {
-      let rejectTimeout: number | null = setTimeout(() => {
+      let rejectTimeout: ReturnType<typeof setTimeout> | null = setTimeout(() => {
         setConnectionTimeout(true);
         clearTimeout(rejectTimeout!);
         rejectTimeout = null;
@@ -195,7 +201,7 @@ const CallForHelp = () => {
   }, []);
   useEffect(() => {
     const interval = setInterval(async () => {
-      let rejectTimeout: number | null = setTimeout(() => {
+      let rejectTimeout: ReturnType<typeof setTimeout> | null = setTimeout(() => {
         setConnectionTimeout(true);
         clearTimeout(rejectTimeout!);
         rejectTimeout = null;
@@ -281,7 +287,7 @@ const CallForHelp = () => {
               text="CANCEL"
               margin={0}
               clickHandler={async () => {
-                let rejectTimeout: number | null = setTimeout(() => {
+                let rejectTimeout: ReturnType<typeof setTimeout> | null = setTimeout(() => {
                   setConnectionTimeout(true);
                   clearTimeout(rejectTimeout!);
                   rejectTimeout = null;

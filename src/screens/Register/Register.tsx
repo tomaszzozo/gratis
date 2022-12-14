@@ -1,21 +1,22 @@
 import {useState} from "react";
-import {Image, Text, View} from "react-native";
+import {Image, Text} from "react-native";
 import {Center, VStack} from "native-base";
 import {Feather, Foundation, MaterialIcons} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../../navigation/AppNavigation";
 import {createUserWithEmailAndPassword} from "firebase/auth";
-import {auth} from "../../../firebaseConfig";
 import { updateProfile } from "firebase/auth";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+import {auth} from "../../../firebaseConfig";
+import {RootStackParamList} from "../../navigation/AppNavigation";
 import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
-
 import Logo from "../../../assets/logo/logoMockWhite.png";
-
 import COLORS from "../../constants/colors";
+import { registerForPushNotifications } from "../../utils/notifications";
+
+
 import styles from "./styles/Register.styles";
 import { validateEmail, validateUsername, validatePassword, validateRepeatedPassword } from "../../utils/validators";
 
@@ -87,6 +88,7 @@ const Register = () => {
                 displayName: username,
               }).then(() => {
                 setRegisterError(false);
+                registerForPushNotifications();
               }).catch((error) => console.log(error));
             })
             .catch((error) => {

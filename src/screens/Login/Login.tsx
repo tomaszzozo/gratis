@@ -10,6 +10,7 @@ import {signInWithEmailAndPassword} from "firebase/auth";
 
 import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
+import { registerForPushNotifications } from "../../utils/notifications";
 
 import Logo from "../../../assets/logo/logoMockWhite.png";
 
@@ -55,6 +56,7 @@ const Login = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then(() => {
               setLoginError(false);
+              registerForPushNotifications();
             })
             .catch((error) => {
               setLoginError(true);

@@ -1,13 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../navigation/AppNavigation";
-import { View } from "react-native";
+import { View, Alert } from "react-native";
 import { Text, VStack, Image, Center } from "native-base";
+import { getAuth, signOut } from "firebase/auth";
+
+import { RootStackParamList } from "../../navigation/AppNavigation";
 import AppBar from "../../components/common/AppBar";
 import ImageButton from "../../components/common/ImageButton";
 import COLORS from "../../constants/colors";
+
 import styles from "./styles/MainScreen.styles";
-import { getAuth } from "firebase/auth";
 
 type MainScreenProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -24,6 +26,7 @@ export default function MainScreen() {
 	};
 	const auth = getAuth();
 	const user = auth.currentUser;
+
 	return (
 		<View style={styles.container}>
 			<AppBar />

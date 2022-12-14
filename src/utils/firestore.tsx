@@ -144,7 +144,8 @@ export const addUserData = async (
   email: string,
   address?: string,
   phone?: string,
-  range?: string
+  range?: string,
+  pushToken?: string,
 ) => {
   await setData({
     collection: "UsersData",
@@ -153,6 +154,7 @@ export const addUserData = async (
       phone: phone,
       address: address,
       range: range,
+      pushToken: pushToken,
     },
   });
 };
@@ -161,7 +163,8 @@ export const getUserData = async (): Promise<{
   address: string;
   phone: string;
   range: string;
-}> => {
+  pushToken: string,
+} | undefined> => {
   let mail = getAuth().currentUser?.email;
   if (mail == null) {
     throw new Error("How did we get here?");
@@ -173,8 +176,10 @@ export const getUserData = async (): Promise<{
       address: docSnap.data().address,
       phone: docSnap.data().phone,
       range: docSnap.data().range,
+      pushToken: docSnap.data().pushToken,
     };
   } else {
-    throw new Error("No such document!");
+    //throw new Error("No such document!");
+    return undefined;
   }
 };
