@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     middleSection: {
         flexDirection: "row",
         justifyContent: "center",
-        height: Dimensions.get('window').height * 200 / 568
+        height: Dimensions.get('window').height * 180 / 568
     },
     bottomSection: {
         flexDirection: "row",

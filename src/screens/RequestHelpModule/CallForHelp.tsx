@@ -19,14 +19,16 @@ import {
   getUsersWhoWantToHelp,
 } from "../../utils/firestore";
 import * as Linking from "expo-linking";
+import { Feather } from "@expo/vector-icons";
 
 import { sendPushNotification } from "../../utils/notifications";
+import CustomInput from "./components/CustomInput";
 
 const CallForHelp = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const username = "mockUsername";
-
+  const[ message, setMessage] = useState(""); 
   const [connectionTimeout, setConnectionTimeout] = useState(false);
   const [coords, setCoords] = useState<{ latitude: string; longitude: string }>(
     { latitude: "", longitude: "" }
@@ -98,7 +100,8 @@ const CallForHelp = () => {
           username,
           location.coords.latitude.toString().substring(0, 9),
           location.coords.longitude.toString().substring(0, 9),
-          date
+          date,
+          message
         ).then(() => {
           if (rejectTimeout) {
             clearTimeout(rejectTimeout!);
@@ -246,6 +249,17 @@ const CallForHelp = () => {
         <Box style={styles.bottomSection}>
           <Box style={styles.cardsSection}>
             <Box style={styles.bottomCard}>
+              <CustomInput
+              state = {message}
+                setState={(input: string) => {
+                  setMessage(input);
+                }}
+                placeholder="Your messsage about situation"
+                icon={<Feather name="message-circle" color={COLORS.blood} />}
+              />
+              </Box>
+            <Box style={styles.bottomCard}>
+            
               <MaterialIcons
                 name="info"
                 size={(Dimensions.get("window").height * 32) / 568}

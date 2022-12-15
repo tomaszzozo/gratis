@@ -46,7 +46,8 @@ export const addUserRequestingHelp = async (
   username: string,
   latitude: string,
   longitude: string,
-  timestamp: Date
+  timestamp: Date,
+  message: string
 ) => {
   await setData({
     collection: "UsersRequestingHelp",
@@ -55,6 +56,7 @@ export const addUserRequestingHelp = async (
       latitude: latitude,
       longitude: longitude,
       timestamp: timestamp.toString(),
+      message: message,
     },
   });
 };
