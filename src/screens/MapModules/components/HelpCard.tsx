@@ -62,27 +62,6 @@ const HelpingUserCard = ({
           </Text>
         </Box>
       </Box>
-      <Box
-        style={{
-          flexDirection: "row",
-          justifyContent: "flex-end",
-        }}
-      >
-        <Button
-          size={(Dimensions.get("window").height * 32) / 568}
-          variant={"unstyled"}
-          onPress={mapIconClickHandler}
-        >
-          <MaterialCommunityIcons
-            name="map-marker-account-outline"
-            style={{
-              marginLeft: 11,
-            }}
-            size={(Dimensions.get("window").height * 32) / 568}
-            color={COLORS["floral white"]}
-          />
-        </Button>
-      </Box>
     </Box>
   );
 };
