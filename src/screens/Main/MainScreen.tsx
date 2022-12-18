@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { View, Alert } from "react-native";
+import { View } from "react-native";
 import { Text, VStack, Image, Center } from "native-base";
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 import { RootStackParamList } from "../../navigation/AppNavigation";
 import AppBar from "../../components/common/AppBar";

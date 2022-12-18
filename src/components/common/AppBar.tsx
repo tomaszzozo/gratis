@@ -9,7 +9,9 @@ import {
   Text,
   Icon,
   IconButton,
+  Menu,
 } from "native-base";
+import { getAuth, signOut } from "firebase/auth";
 import { MaterialIcons } from "@expo/vector-icons";
 import logo from "../../../assets/logo/logoMockWhite.png";
 import COLORS from "../../constants/colors";
@@ -21,6 +23,16 @@ export default function AppBar() {
   const handleAccountPress = () => {
     navigation.navigate("AccountSettings");
   };
+
+  const logout = () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      // Sign-out successful.
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
   return (
     <>
       <StatusBar barStyle="light-content" />
@@ -51,16 +63,21 @@ export default function AppBar() {
             }
             onPress={handleAccountPress}
           />
-          <IconButton
-            icon={
-              <Icon
-                as={MaterialIcons}
-                name="more-vert"
-                size="xl"
-                color="white"
-              />
-            }
-          />
+          <Menu w="190" trigger={triggerProps => {
+            return <IconButton
+                    {...triggerProps}
+                    icon={
+                      <Icon
+                        as={MaterialIcons}
+                        name="more-vert"
+                        size="xl"
+                        color="white"
+                      />
+                    }
+                  />;
+          }}>
+              <Menu.Item onPress={logout}>Wyloguj</Menu.Item>
+            </Menu>
         </HStack>
       </HStack>
     </>
