@@ -33,6 +33,10 @@ const deleteData = async (collection: string, fileName: string) => {
   await deleteDoc(doc(dbFirestore, collection, fileName));
 };
 
+export const deleteUserData = async (email: string) => {
+  await deleteData("UsersData", email);
+};
+
 /**
  * Add data user to collection "UsersRequestingHelp".
  * Overwrites if user data already exists.

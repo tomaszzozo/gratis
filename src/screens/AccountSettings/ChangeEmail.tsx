@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/AppNavigation";
 import { validateEmail } from "../../utils/validators";
+import { getUserData, addUserData, deleteUserData } from "../../utils/firestore";
 
 import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
@@ -60,10 +61,15 @@ export default function ChangeEmail(props: any) {
 		else throw new Error("Failed to get auth!");
 		if (user) {
 			reauthenticateWithCredential(user, credential)
-				.then((res) => {
-					console.log(res);
-					updateEmail(user, email)
-						.then(() => {
+				.then(async (res) => {
+					const oldEmail = auth.currentUser?.email;
+          const userData = await getUserData();
+          if (userData && oldEmail) {
+            addUserData(email, userData.address, userData.phone, userData.range, userData.pushToken);
+            deleteUserData(oldEmail);
+
+            updateEmail(user, email)
+						.then(async () => {
 							setSaveError(false);
 							setEmailChanged(true);
 						})
@@ -72,6 +78,9 @@ export default function ChangeEmail(props: any) {
 							setSaveError(true);
 							setSaveErrorMessage("Failed to update your password!");
 						});
+          } else {
+            console.log("Error during obtaining user data!");
+          }
 				})
 				.catch((err) => {
 					console.log(err.message);
