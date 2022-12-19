@@ -13,17 +13,21 @@ import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import MapView from "react-native-maps";
 import HomeAppBar from "../../components/common/HomeAppBar";
+import {
+	getUserRequestingHelp,
+} from "../../utils/firestore";
 
 const MapMode = () => {
-	const username = "mockUsername";
+	const [message, setMessage] = useState("Test message from person requesting help");
 	const navigation =
 		useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+		
 
 	const InfoCard = () => {
 		return (
 			<Box style={styles.cardsSection}>
 				<HelpCard
-					username={username}
+					username={message}
 					backIconClickHandler={() => {
 						navigation.navigate("MapMode");
 					}}
@@ -51,7 +55,7 @@ const MapMode = () => {
 					/>
 				</Box>
 				<Box style={styles.middleSection}>
-					<ScrollView h={styles.middleSection.height - 20}>
+					<ScrollView h={styles.middleSection.height - 5}>
 						<InfoCard />
 					</ScrollView>
 				</Box>

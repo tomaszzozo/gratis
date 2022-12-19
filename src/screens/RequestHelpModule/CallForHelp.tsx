@@ -27,7 +27,7 @@ import CustomInput from "./components/CustomInput";
 const CallForHelp = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const username = "mockUsername";
+  const username = "Username";
   const[ message, setMessage] = useState(""); 
   const [connectionTimeout, setConnectionTimeout] = useState(false);
   const [coords, setCoords] = useState<{ latitude: string; longitude: string }>(

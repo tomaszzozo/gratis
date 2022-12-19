@@ -98,6 +98,7 @@ export const getUsersWhoRequestHelp = async () => {
     latitude: string;
     longitude: string;
     timestamp: Date;
+    message: string;
   }> = [];
   querySnapshot.forEach((doc) => {
     toReturn.push({
@@ -105,9 +106,20 @@ export const getUsersWhoRequestHelp = async () => {
       latitude: doc.data().latitude,
       longitude: doc.data().longitude,
       timestamp: doc.data().data,
+      message: doc.data().message,
     });
   });
   return toReturn;
+};
+
+export const getUserRequestingHelp = async (username: string) => {
+  const querySnapshot = await getDocs(
+    query(collection(dbFirestore, username))
+  );
+  let message: string = "";
+  message = querySnapshot.docs[0].data().message;
+  
+  return message;
 };
 
 /**

@@ -29,6 +29,7 @@ const MapMode = () => {
 	const username = "mockUsername";
 	const lat = "";
 	const long = "";
+	const message = "mockMessage";
 
 	const [coords, setCoords] = useState<{ latitude: string; longitude: string }>(
 		{ latitude: "", longitude: "" }
@@ -43,6 +44,7 @@ const MapMode = () => {
 			latitude: string;
 			longitude: string;
 			timestamp: Date;
+			message: string;
 		}>
 	);
 
@@ -58,7 +60,7 @@ const MapMode = () => {
 				username,
 				location.coords.latitude.toString().substring(0, 9),
 				location.coords.longitude.toString().substring(0, 9),
-				date
+				date, 
 			)
 		);
 		setLastRefresh(date.toString().substring(16, 24));
