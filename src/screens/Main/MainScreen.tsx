@@ -1,13 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { View } from "react-native";
+import { useEffect } from "react";
 import { Text, VStack, Image, Center } from "native-base";
 import { getAuth } from "firebase/auth";
+import { addNotificationResponseReceivedListener } from "expo-notifications";
 
 import { RootStackParamList } from "../../navigation/AppNavigation";
 import AppBar from "../../components/common/AppBar";
 import ImageButton from "../../components/common/ImageButton";
 import COLORS from "../../constants/colors";
+import { registerForPushNotifications } from "../../utils/notifications";
 
 import styles from "./styles/MainScreen.styles";
 
@@ -26,6 +29,17 @@ export default function MainScreen() {
 	};
 	const auth = getAuth();
 	const user = auth.currentUser;
+
+  useEffect(() => {
+    registerForPushNotifications();
+    addNotificationResponseReceivedListener((notification) => {
+      if (getAuth().currentUser) {
+        navigation.navigate("MapMode");
+      } else {
+        navigation.navigate("HelpNeeded", { username: notification.notification.request.content.data.username as string })
+      }
+    });
+  }, []);
 
 	return (
 		<View style={styles.container}>

@@ -23,6 +23,7 @@ import ChangePassword from "../screens/AccountSettings/ChangePassword";
 import DeleteAccount from "../screens/AccountSettings/DeleteAccount";
 import AccountDeleted from "../screens/AccountSettings/AccountDeleted";
 import ChangeEmail from "../screens/AccountSettings/ChangeEmail";
+import HelpNeeded from "../screens/Login/HelpNeeded";
 
 const theme = {
 	...DefaultTheme,
@@ -51,6 +52,7 @@ export type RootStackParamList = {
 	MapMode: undefined;
 	ExchangeInfo: undefined;
 	NumberSharingActive: undefined;
+  HelpNeeded: { username: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -104,6 +106,7 @@ const AppNavigation = ({ navigationRef }: { navigationRef: any }) => {
 							component={PasswordResetConfirmation}
 						/>
 						<Stack.Screen name="AccountDeleted" component={AccountDeleted} />
+            <Stack.Screen name="HelpNeeded" component={HelpNeeded} />
 					</Stack.Group>
 				)}
 			</Stack.Navigator>

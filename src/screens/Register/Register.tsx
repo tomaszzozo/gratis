@@ -14,7 +14,6 @@ import CustomInput from "../../components/common/CustomInput";
 import CustomButton from "../../components/common/CustomButton";
 import Logo from "../../../assets/logo/logoMockWhite.png";
 import COLORS from "../../constants/colors";
-import { registerForPushNotifications } from "../../utils/notifications";
 
 
 import styles from "./styles/Register.styles";
@@ -88,7 +87,6 @@ const Register = () => {
                 displayName: username,
               }).then(() => {
                 setRegisterError(false);
-                registerForPushNotifications();
               }).catch((error) => console.log(error));
             })
             .catch((error) => {

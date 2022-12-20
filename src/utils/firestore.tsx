@@ -187,3 +187,7 @@ export const getUserData = async (): Promise<{
     return undefined;
   }
 };
+
+export const getUsersData = async () => {
+  return await getDocs(collection(dbFirestore, "UsersData"));
+}

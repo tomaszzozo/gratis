@@ -12,15 +12,19 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/AppNavigation";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
+import { getAuth } from "firebase/auth";
 import {
   addUserRequestingHelp,
   declineHelpFromUser,
   deleteUserRequestingHelp,
   getUsersWhoWantToHelp,
+  getUsersData
 } from "../../utils/firestore";
 import * as Linking from "expo-linking";
 
 import { sendPushNotification } from "../../utils/notifications";
+
+const DEGREE_KM = 111;
 
 const CallForHelp = () => {
   const navigation =
@@ -37,7 +41,44 @@ const CallForHelp = () => {
   );
 
   useEffect(() => {
-    sendPushNotification("");
+    const getCurrentLocation = async () => {
+      return await Location.getCurrentPositionAsync()
+    }
+
+    const currentCords = getCurrentLocation();
+
+    currentCords.then((res) => {
+      const { coords } = res;
+      const querySnapshot = getUsersData();
+      querySnapshot.then((res) => {
+        res.forEach(async (doc) => {
+          const userData = doc.data();
+          if (doc.id !== getAuth().currentUser?.email) {
+            if (userData.pushToken) {
+              if (userData.address) {
+                const userLocation = await Location.geocodeAsync(userData.address);
+                if (userLocation.length) {
+                  const longitudeDifference = Math.abs(coords.longitude - userLocation[0].longitude);
+                  const latitudeDifference = Math.abs(coords.latitude - userLocation[0].latitude);
+                  
+                  if (userData.range) {
+                    if (longitudeDifference * DEGREE_KM <= userData.range && latitudeDifference * DEGREE_KM <= userData.range) {
+                      sendPushNotification(userData.pushToken);
+                    } 
+                  } else {
+                    if (longitudeDifference * DEGREE_KM <= 30 && latitudeDifference * DEGREE_KM <= 30) {
+                      sendPushNotification(userData.pushToken);
+                    } 
+                  }
+                }
+              }
+            }
+          }
+        })
+      });
+    })
+    
+    //sendPushNotification("ExponentPushToken[PBMLYwJ5NXFOSSI1TwXcsy]");
   }, []);
 
   const updateData = async () => {

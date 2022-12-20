@@ -5,6 +5,7 @@ import {
   getPermissionsAsync,
   requestPermissionsAsync,
   getExpoPushTokenAsync,
+  setNotificationHandler,
 } from 'expo-notifications';
 import { getAuth } from "firebase/auth";
 
@@ -43,6 +44,14 @@ export const registerForPushNotifications = async () => {
     return;
   }
 
+  setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+    })
+  });
+
   const { data } = await getExpoPushTokenAsync();
 
   const userData = await getUserData();
@@ -70,9 +79,9 @@ export const sendPushNotification = async (expoPushToken: string) => {
   const message = {
     to: expoPushToken,
     sound: 'default',
-    title: 'Original Title',
-    body: 'And here is the body!',
-    data: { someData: 'goes here' },
+    title: 'Human in trouble!',
+    body: `${getAuth().currentUser?.displayName} needs your help!`,
+    data: { username: getAuth().currentUser?.displayName },
   };
 
   await fetch('https://exp.host/--/api/v2/push/send', {
