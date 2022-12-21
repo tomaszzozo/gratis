@@ -20,6 +20,7 @@ import {
   deleteUserRequestingHelp,
   getUsersWhoWantToHelp,
   getUsersWhoRequestHelp,
+  addUserWhoWantsToHelp,
 } from "../../utils/firestore";
 import * as Linking from "expo-linking";
 import { getAuth } from "firebase/auth";
@@ -77,7 +78,8 @@ const MapMode = () => {
             <HelpingUserCard
               key={index}
               username={key.username}
-              contactClickHandler={() => {
+              contactClickHandler={async () => {
+                await addUserWhoWantsToHelp(key.username);
                 navigation.navigate("ExchangeInfo", {
                   username: key.username,
                   latitude: key.latitude,
